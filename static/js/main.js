@@ -207,7 +207,7 @@
                         orderForm.reset();
                         currentQuantity = 1;
                         updateOrderSummary();
-                        window.location.href = '/Commande';
+                        window.location.href = '/';
                     });
                 } else {
                     throw new Error(result.message || 'Erreur lors de l\'enregistrement');
