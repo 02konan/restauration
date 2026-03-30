@@ -12,6 +12,11 @@ def home():
 def commande():
     return render_template("commande.html")
 
+@app.route('/inscriptionPartenaire')
+def partenaire():
+    """Page d'inscription pour les maquis partenaires IFSM."""
+    return render_template('inscription-partner.html')
+
 @app.route("/api/actionCommande", methods=["POST"])
 def api_commandes():
     data = request.get_json(silent=True)
