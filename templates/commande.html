@@ -1,0 +1,215 @@
+
+  <!-- LEFT SIDE: INTERFACE 1 (Mes commandes) + INTERFACE 2 (Passer commande) + INTERFACE 3 (Confirmation) 
+    but we combine to replicate full flow but visually show all screens as per design -->
+    {% extends 'base.html' %}
+   {% block content %}
+
+        <div class="container-fluid d-flex">
+            <a href="#" class="ms-auto">Se connecter</a>
+        </div>
+
+        <div class="container-fluid p-0 banner">
+            <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
+            <a href="/" class="btn btn-custom-primary rounded-pill">
+                Commandez <i class="bi bi-arrow-right-circle-fill ms-3"></i>
+            </a>
+            <img src="{{ url_for('static', filename='back/back0.png') }}" alt="">
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center my-3 subtitle">
+            <h4 class="fw-bold">Mes commandes</h4>
+            <span class="text-muted" id="totalResults">
+                12 commandes
+            </span>
+        </div>
+
+        <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande" id="result-commande">
+            <div class="order-item shadow-sm">
+                <div class="content w-100 d-flex gap-3">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
+                    </div>
+                    <div class="text d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="mb-0">Poulet braisé</h3>
+                            <span class="dot dot-pending" title="En attente">
+                                <i class="bi bi-clock-history"></i>
+                            </span>
+                        </div>
+                        <div class="small text-muted desc mt-2">
+                            Du bon poulet braisé accompagné d'une boule d'attitété
+                        </div>
+                        <div class="price-tag mt-auto">10000 F</div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                        <p class="small text-muted date mb-1">25 Mar 2026</p>
+                        <p class="quantity ms-auto mb-0">2</p>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top">
+                    <small class="text-warning">
+                        En cours de traitement
+                    </small>
+                </div>
+            </div>
+
+            <div class="order-item shadow-sm">
+                <div class="content w-100 d-flex gap-3">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
+                    </div>
+                    <div class="text d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="mb-0">Poulet braisé</h3>
+                            <span class="dot dot-info" title="En préparation">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </span>
+                        </div>
+                        <div class="small text-muted desc mt-2">
+                            Du bon poulet braisé accompagné d'une boule d'attitété
+                        </div>
+                        <div class="price-tag mt-auto">10000 F</div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                        <p class="small text-muted date mb-1">25 Mar 2026</p>
+                        <p class="quantity ms-auto mb-0">2</p>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top">
+                    <small class="text-info">
+                        En preparation
+                    </small>
+                </div>
+            </div>
+
+            <div class="order-item shadow-sm">
+                <div class="content w-100 d-flex gap-3">
+                    <div class="image">
+                        <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
+                    </div>
+                    <div class="text d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="mb-0">Poulet braisé</h3>
+                            <span class="dot dot-success" title="Livrée">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </span>
+                        </div>
+                        <div class="small text-muted desc mt-2">
+                            Du bon poulet braisé accompagné d'une boule d'attitété
+                        </div>
+                        <div class="price-tag mt-auto">10000 F</div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                        <p class="small text-muted date mb-1">25 Mar 2026</p>
+                        <p class="quantity ms-auto mb-0">2</p>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top">
+                    <small class="text-success">
+                        Livrée le 27 Mars 2026
+                    </small>
+                </div>
+            </div>
+        </div>
+    <!-- <script src="./bootstrap-5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+    
+    <script>
+        // Variables globales
+        let currentPage = 1;
+        let currentFilters = new FormData();
+        let resultsPerPage = 10;
+        let searchTimeout;
+        let activeFilter = '';
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Écouteurs filtre statut (pills)
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    activeFilter = this.dataset.filter;
+                    currentPage = 1;
+                });
+            });
+
+            // Fermer le menu contextuel en cliquant ailleurs
+            document.addEventListener('click', closeContextMenu);
+            document.addEventListener('scroll', closeContextMenu, true);
+
+            // Ajouter les écouteurs context menu aux order-items existants
+            document.querySelectorAll('.order-item').forEach((row, index) => {
+                // Simuler un ID de commande pour la démo (dans un vrai app, ça viendrait des données)
+                const commandeId = index + 1;
+                const commandeStatut = index === 0 ? 'en_attente' : index === 1 ? 'en_preparation' : 'livree';
+                
+                // Context menu : clic droit desktop + maintien mobile
+                let pressTimer;
+                row.addEventListener('contextmenu', (e) => showContextMenu(e, commandeId, commandeStatut));
+                row.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => {
+                        const touch = e.touches[0];
+                        showContextMenu({ preventDefault: () => {}, clientX: touch.clientX, clientY: touch.clientY }, commandeId, commandeStatut);
+                    }, 600);
+                }, { passive: true });
+                row.addEventListener('touchend', () => clearTimeout(pressTimer));
+                row.addEventListener('touchmove', () => clearTimeout(pressTimer));
+            });
+        });
+
+        // ── Context menu ──────────────────────────────────────
+        let contextMenuTarget = null;
+
+        function showContextMenu(e, commandeId, commandeStatut) {
+            e.preventDefault();
+            closeContextMenu();
+
+            contextMenuTarget = { id: commandeId, statut: commandeStatut };
+
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.id = 'contextMenu';
+
+            menu.innerHTML = `
+                <button class="context-menu-item" onclick="handleContextAction('details', ${commandeId})">
+                    <i class="bi bi-eye"></i> Détails
+                </button>
+                <button class="context-menu-item danger" onclick="handleContextAction('livree', ${commandeId})">
+                    <i class="bi bi-x-circle-fill"></i> Annulée
+                </button>
+            `;
+
+            // Positionner le menu
+            const x = e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth / 2;
+            const y = e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight / 2;
+
+            menu.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+            menu.style.top  = Math.min(y, window.innerHeight - 160) + 'px';
+
+            document.body.appendChild(menu);
+        }
+
+        function closeContextMenu() {
+            const existing = document.getElementById('contextMenu');
+            if (existing) existing.remove();
+            contextMenuTarget = null;
+        }
+
+        // Formater la date côté JS (équivalent PHP formatDate)
+        // function formatDateJS(dateStr) {
+        //     if (!dateStr) return 'Date inconnue';
+        //     const date = new Date(dateStr);
+        //     const now = new Date();
+        //     const diff = (now - date) / 1000;
+
+        //     if (diff < 86400) return "Aujourd'hui";
+        //     if (diff < 172800) return 'Hier';
+
+        //     return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+        // }
+
+    </script>
+ {% endblock %}
+<!-- </body>
+</html> -->

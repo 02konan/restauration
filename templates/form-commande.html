@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- <div class="d-flex align-items-center gap-2 my-3">
+    <a href="javascript:history.back()" class="return"><i class="bi bi-chevron-left"></i></a><h4 class="fw-bold">Commande</h4>
+</div> -->
+
+    <!-- Toast de bienvenue - En haut à droite -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="welcomeToast" class="toast align-items-center border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000" style="background: white; min-width: 320px;">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center gap-3 p-3">
+                    <i class="bi bi-check-circle-fill text-success fs-2"></i>
+                    <div class="flex-grow-1">
+                        <strong class="text-dark fs-6">Bienvenue chez Du Bon Poulet Braisé !</strong><br>
+                        <small class="text-muted">Profitez de nos délicieux poulets braisés. Entrez votre code promo si vous avez un.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="orderForm" class="container-fluid p-0 d-flex flex-column gap-2 list-commande">
+        <div class="card-commande-item shadow-sm">
+            <div class="content w-100 d-flex gap-3">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
+                </div>
+                <div class="d-flex flex-column w-100">
+                    <div class="text d-flex flex-column">
+                        <h3 class="">Poulet braisé</h3>
+                        <div class="small text-muted desc mt-2">Du bon poulet braisé accompagné d'une boule d'attitété</div>
+                    </div>
+                    <div class="d-flex w-100 mt-auto">
+                        <div class="price-tag" id="unitPrice">5 000 F</div>
+                        <div class="d-flex m-0 ms-auto align-items-center">
+                            <div class="count-btn" id="decrementBtn"><i class="bi bi-dash"></i></div>
+                            <div class="count-btn count-number" id="quantityDisplay">1</div>
+                            <div class="count-btn" id="incrementBtn"><i class="bi bi-plus"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <label for="" class="form-label">Lieu de livraison <span class="required">*</span></label>
+                <select class="form-select" id="deliveryAddress" required>
+                    <option value="" disabled selected>Sélectionnez une commune</option>
+                    <optgroup label="Abidjan Nord">
+                        <option value="Abobo">Abobo</option>
+                        <option value="Adjamé">Adjamé</option>
+                        <option value="Attécoubé">Attécoubé</option>
+                        <option value="Cocody">Cocody</option>
+                        <option value="Plateau">Plateau</option>
+                    </optgroup>
+                    <optgroup label="Abidjan Sud">
+                        <option value="Koumassi">Koumassi</option>
+                        <option value="Marcory">Marcory</option>
+                        <option value="Port-Bouët">Port-Bouët</option>
+                        <option value="Treichville">Treichville</option>
+                        <option value="Bingerville">Bingerville</option>
+                    </optgroup>
+                    <optgroup label="Abidjan Ouest">
+                        <option value="Yopougon">Yopougon</option>
+                        <option value="Songon">Songon</option>
+                    </optgroup>
+                    <optgroup label="Abidjan Est">
+                        <option value="Anyama">Anyama</option>
+                        <option value="Brofodoumé">Brofodoumé</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="d-flex gap-2 mt-2">
+                <div class="col">
+                    <label for="" class="form-label">Contact <span class="required">*</span></label>
+                    <input type="tel" id="contactPhone" class="form-control" placeholder="Ex: 07 00 00 00 00" required>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Code promo</label>
+                    <input type="text" id="promoCode" class="form-control" placeholder="Entrez votre code promo">
+                </div>
+            </div>
+        </div>
+        <div class="card-commande-item shadow-sm">
+            <ul class="list-group">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Prix unitaire</td>
+                            <td class="text-end fw-semibold" id="displayUnitPrice">5.000 F</td>
+                        </tr>
+                        <tr>
+                            <td>Quantité</td>
+                            <td class="text-end fw-semibold" id="displayQuantity">1</td>
+                        </tr>
+                        <tr>
+                            <td>Sous-total</td>
+                            <td class="text-end fw-semibold" id="subtotal">5.000 F</td>
+                        </tr>
+                        <tr>
+                            <td>Livraison</td>
+                            <td class="text-end fw-semibold" id="deliveryFee">Gratuite</td>
+                        </tr>
+                        <tr class="fs-4" style="border-color: transparent !important;">
+                            <td class="fw-semibold">Total</td>
+                            <td class="text-end fw-bold" style="color: var(--orange);" id="totalAmount">5.000 F</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ul>
+            <div class="btn-group mb-2 w-100">
+                <form action="/commande" method="POST" id="orderForm" class="w-100">
+                    <button type="submit" class="btn btn-custom-secondary rounded-pill mt-3 animation-slide">
+                    <i class="bi bi-bag-check-fill"></i><span class="ms-2">Valider la commande</span>
+                </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Inputs hidden pour stocker les valeurs -->
+        <input type="hidden" id="hiddenQuantity" name="quantity" value="1">
+        <input type="hidden" id="hiddenUnitPrice" name="unit_price" value="5000">
+        <input type="hidden" id="hiddenSubtotal" name="subtotal" value="5000">
+        <input type="hidden" id="hiddenTotal" name="total" value="5000">
+    </form>
+<style>
+    body{
+    background: url(../static/back/back3.png) no-repeat;
+    background-size: cover;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+:root{
+    --text-font: 'Montserrat', sans-serif;
+    --title-font: 'Montserrat', sans-serif;
+    --font-size: 13px !important;
+    --text-color: #1C1C1C;
+    --orange: #FF6B00;
+    --dark-orange: #ff8833;
+    --red: #C0392B;
+    --dark-red: #e05040;
+    --light-red: #fcebeb;
+    --dark-white: #f7f7f7;
+    --white: #FFFFFF;
+    --cream: #fdfaf4;
+    --grey: #80756b;
+    --light-grey: #d1d3d8;
+    --green: #27ae5f;
+    --light-green: #27ae5f23;
+}
+
+body{
+    height: 100vh;
+    background: url(../back/back4.png) no-repeat;
+    background-size: cover;
+}
+.text-content{
+    height: 80vh;
+}
+.title{
+    font-family: 'Montserrat', sans-serif;
+    color: var(--cream);
+    font-size: 40px;
+    font-weight: 900;
+}
+.title .good{
+    font-size: 80px;
+}
+/* .spinner-border{
+    animation: smooths 0.5s ease;
+    animation-delay: 1s;
+} */
+
+@keyframes smooths {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}

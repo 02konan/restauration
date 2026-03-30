@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main">
+
+  <!-- ── EN-TÊTE ── -->
+  <div class="d-flex align-items-center gap-2" style="margin-bottom:4px;margin-top:4px;">
+    <a href="./commande.html" class="return">
+      <i class="bi bi-chevron-left" style="margin:0;font-size:14px;"></i>
+    </a>
+    <h4 style="font-weight:700;margin:0;">Récapitulatif</h4>
+  </div>
+
+  <!-- ── CARD 1 : Statut + produit ── -->
+  <div class="card-commande-item">
+
+    <!-- Statut + ID -->
+    <div class="d-flex align-items-center justify-content-between" style="margin-bottom:14px;">
+      <span class="status-badge">
+        <i class="bi bi-check-circle-fill"></i> Commande confirmée
+      </span>
+      <span class="commande-id">N° <span>#DBP-2024</span></span>
+    </div>
+
+    <hr>
+
+    <!-- Produit -->
+    <div class="product-row" style="margin-top:12px;">
+      <div class="product-img">
+        <img src="image/back0.png"
+             alt="Poulet braisé"
+            >
+      </div>
+      <div class="product-info">
+        <h3>Poulet braisé</h3>
+        <div class="desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
+        <div class="price-tag" style="margin-top:10px;">4.000 F</div>
+      </div>
+    </div>
+
+    <hr style="margin-top:14px !important;">
+
+    <!-- Infos livraison -->
+    <div style="margin-top:4px;">
+      <div class="info-row">
+        <span class="ikey"><i class="bi bi-geo-alt" style="margin-right:4px;font-size:12px;"></i>Commune</span>
+        <span class="ival" id="disp-commune">Cocody</span>
+      </div>
+      <div class="info-row">
+        <span class="ikey"><i class="bi bi-telephone" style="margin-right:4px;font-size:12px;"></i>Contact</span>
+        <span class="ival" id="disp-contact">07 00 00 00 00</span>
+      </div>
+      <div class="info-row">
+        <span class="ikey"><i class="bi bi-ticket-perforated" style="margin-right:4px;font-size:12px;"></i>Code promo</span>
+        <span class="ival" id="disp-promo" style="color:var(--orange);">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CARD 2 : Récap chiffres ── -->
+  <div class="card-commande-item">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Prix unitaire</td>
+          <td class="text-end fw-semibold">4.000 F</td>
+        </tr>
+        <tr>
+          <td>Quantité</td>
+          <td class="text-end fw-semibold" id="disp-qty">01</td>
+        </tr>
+        <tr>
+          <td>Sous-total</td>
+          <td class="text-end fw-semibold" id="disp-subtotal">4.000 F</td>
+        </tr>
+        <tr>
+          <td>Livraison</td>
+          <td class="text-end fw-semibold">1.500 F</td>
+        </tr>
+        <tr style="border-color:transparent !important;">
+          <td class="fs-4 fw-semibold">Total</td>
+          <td class="text-end fw-bold fs-4" style="color:var(--orange);" id="disp-total">5.500 F</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── CARD 3 : Message app mobile ── -->
+  <div class="app-banner">
+
+    <div class="tag">
+      <i class="bi bi-stars" style="margin:0;font-size:10px;"></i>
+      Bientôt disponible
+    </div>
+
+    <h4>🍗 Du Bon Poulet Braisé arrive sur mobile !</h4>
+
+    <p>
+      Commandez plus vite, suivez vos livraisons en temps réel et cumulez des points de fidélité directement depuis votre smartphone.
+    </p>
+
+    <!-- Phone preview -->
+    <div class="phone-preview">
+      <div class="phone-icon">
+        <i class="bi bi-phone-fill"></i>
+      </div>
+      <p>
+        <strong>Votre application est en cours de développement.</strong><br>
+        En passant commande aujourd'hui, vos informations seront utilisées pour vous notifier dès le lancement officiel de l'app.
+      </p>
+    </div>
+
+    <!-- Data notice -->
+    <div class="data-notice">
+      <i class="bi bi-shield-lock-fill"></i>
+      <div>
+        <strong>🔒 Pourquoi nous utilisons vos données ?</strong>
+        Votre numéro de téléphone et votre commune seront utilisés <em>uniquement</em> pour vous envoyer une notification de lancement de l'application mobile <strong>Du Bon Poulet Braisé</strong>. Aucune donnée ne sera partagée avec des tiers.
+      </div>
+    </div>
+
+    <!-- Store buttons -->
+    <div class="stores">
+      <a href="#" class="store-btn">
+        <i class="bi bi-apple"></i>
+        <div class="store-label">
+          <small>Bientôt sur</small>
+          App Store
+        </div>
+      </a>
+      <a href="#" class="store-btn">
+        <i class="bi bi-google-play"></i>
+        <div class="store-label">
+          <small>Bientôt sur</small>
+          Google Play
+        </div>
+      </a>
+    </div>
+
+  </div><!-- /app-banner -->
+
+</div><!-- /main -->
+
+<!-- ── BOUTON SUIVRE LA COMMANDE ── -->
+<div class="btn-submit-wrap">
+  <button class="btn btn-custom-secondary animation-slide" type="button"
+          onclick="this.innerHTML='<i class=\'bi bi-check-lg\' style=\'margin:0;font-size:16px;\'></i><span style=\'margin-left:8px;\'>Merci pour votre commande !</span>';this.style.background='var(--green)';this.style.borderColor='var(--green)';this.disabled=true;">
+    <i class="bi bi-motorcycle" style="margin:0;font-size:16px;"></i>
+    <span style="margin-left:8px;">Suivre ma commande</span>
+  </button>
+</div>
+
+<script>
+  // Récupérer les données passées depuis la page commande (via sessionStorage ou URL params)
+  // Ici on affiche des valeurs d'exemple — à remplacer par les vraies données
+  const params = new URLSearchParams(window.location.search);
+
+  const commune  = params.get('commune')  || 'Cocody';
+  const contact  = params.get('contact')  || '07 00 00 00 00';
+  const promo    = params.get('promo')    || '—';
+  const qty      = parseInt(params.get('qty') || '1');
+
+  const UNIT = 4000, DELIVERY = 1500;
+  const sub   = UNIT * qty;
+  const total = sub + DELIVERY;
+
+  function fmt(n) { return n.toLocaleString('fr-FR').replace(/\u202f|\s/g, '.') + ' F'; }
+
+  document.getElementById('disp-commune').textContent  = commune;
+  document.getElementById('disp-contact').textContent  = contact;
+  document.getElementById('disp-promo').textContent    = promo && promo !== '—' ? promo : '—';
+  document.getElementById('disp-qty').textContent      = String(qty).padStart(2,'0');
+  document.getElementById('disp-subtotal').textContent = fmt(sub);
+  document.getElementById('disp-total').textContent    = fmt(total);
+</script>
+{% endblock %}

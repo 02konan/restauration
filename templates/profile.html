@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#C0392B">
+    <title>Du Bon Poulet Braisé | Commandes & Commissions</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <!-- <link href="./bootstrap-5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <!-- Bootstrap Icons -->
+    <!-- <link rel="stylesheet" href="./bootstrap-icons-1.11.3/font/bootstrap-icons.css"> -->
+    
+    <!-- Bootstrap 5 + Icons + SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <style>
+        body {
+            padding: 0px;
+            background: var(--white);
+            
+        }
+        .banner{
+            border-radius: 0px;
+            align-items: center;
+            flex-direction: column !important;
+        }
+        .banner .return{
+            margin-right: auto !important;
+            
+        }
+        .form-content{
+            position: relative;
+            width: 100%;
+            height: fit-content !important;
+        }
+        #profileForm{
+            position: absolute !important;
+            width: 100%;
+            left: 0;
+            top: -30px;
+            padding: 20px;
+            padding-bottom: 100px;
+            background: var(--white);
+            border-radius: 35px 35px 0 0;
+            z-index: 5;
+        }
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            background: #ffffff59;
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 15px rgba(171, 140, 119, 0.3);
+        }
+        
+        .profile-avatar i {
+            font-size: 40px !important;
+            color: white;
+        }
+        
+        .profile-header {
+            text-align: center;
+            width: 100% !important;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--cream);
+        }
+        
+        .profile-role {
+            color: var(--orange);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .info-group {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .info-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6c757d;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-label i {
+            font-size: 1rem;
+            color: var(--orange);
+        }
+        
+        .info-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-color);
+            word-break: break-word;
+        }
+        
+        .info-value small {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: normal;
+        }
+        
+        .edit-btn {
+            background: none;
+            border: none;
+            color: var(--orange);
+            font-size: 0.8rem;
+            padding: 0;
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
+        }
+        
+        .edit-btn:hover {
+            color: #e65c00;
+            text-decoration: underline;
+        }
+        
+        .statut-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .statut-actif {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .statut-inactif {
+            background: #fee2e2;
+            color: var(--red);
+        }
+        
+        .statut-en-attente {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-outline-orange {
+            background: transparent;
+            border: 2px solid var(--orange);
+            color: var(--orange);
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn-outline-orange:hover {
+            background: var(--orange);
+            color: white;
+        }
+        
+        .btn-danger-custom {
+            background: var(--red);
+            border: none;
+            color: white;
+            padding: 10px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn-danger-custom:hover {
+            background: #b91c1c;
+            color: var(--cream);
+        }
+        
+        .edit-mode-input {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        
+        .edit-mode-input:focus {
+            border-color: var(--orange);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
+        }
+        
+        .inline-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .save-btn {
+            background: var(--orange);
+            border: none;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+        
+        .cancel-btn {
+            background: #e2e8f0;
+            border: none;
+            color: #4a5568;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .profile-avatar {
+            animation: pulse 2s infinite;
+        }
+    </style>
+
+</head>
+<body>
+  <!-- LEFT SIDE: INTERFACE 1 (Mes commandes) + INTERFACE 2 (Passer commande) + INTERFACE 3 (Confirmation) 
+    but we combine to replicate full flow but visually show all screens as per design -->
+    <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow position-fixed">
+            <div class="container-fluid d-flex justify-content-center ">
+                <!-- Logo/Brand à gauche -->
+                <!-- <a class="navbar-brand" href="#">
+                    <img class="me-5" src="./logo.png" height="35" alt="">
+                </a> -->
+                
+                <!-- Menu collapse -->
+                <div class="w-100" id="">
+                    <!-- Liens de navigation -->
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="./commande.html"><i class="bi bi-bag-fill"></i> <span class="ms-1">Commandes</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./cart.html"><i class="bi bi-cart bi-simple"></i><i class="bi bi-cart-fill bi-active"></i><span class="ms-1">Panier</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./code.html"><i class="bi bi-ticket bi-simple"></i><i class="bi bi-ticket-fill bi-active"></i> <span class="ms-1">Code promo</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./profile.html"><i class="bi bi-person bi-simple"></i> <i class="bi bi-person-fill bi-active"></i> <span class="ms-1">Profil</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- <div class="btn-group">
+                    <button class="btn btn-sm">S'inscrire</button>
+                    <button class="btn btn-sm btn-dark rounded-pill">Se connecter</button>
+                </div> -->
+            </div>
+        </nav>
+
+        <div class="container-fluid p-0">
+            <div class="container-fluid p-0 banner">
+                <div class="w-100 d-flex flex-column gap-2 my-3 mb-4 text-start">
+                    <a href="javascript:history.back()" class="return"><i class="bi bi-chevron-left"></i></a>
+                    <!-- En-tête du profil -->
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="profile-name" id="displayName">
+                            Coulibaly Maférima
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Formulaire de profil -->
+            <div class="container-fluid p-0 form-content">
+                <form id="profileForm" class="animation-slide">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td class="pt-4">Informations personelles</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Nom</th>
+                                <td class="text-end">Coulibaly Maférima</td>
+                            </tr>
+                            <tr>
+                                <th>Téléphone</th>
+                                <td class="text-end">0700000000</td>
+                            </tr>
+                            <tr>
+                                <th>Localisation</th>
+                                <td class="text-end">
+                                    -, -
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td class="text-end">Coulibaly@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td class="pt-4">Plus</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th><div class="" data-bs-toggle="modal" data-bs-target="#editModal" >Modifier</div></th>
+                                <td class="text-end">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><a style="color: var(--red);" href="./api/logout.php">Déconnexion</a></th>
+                                <td class="text-end">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Modifier Année scolaire -->
+        <div class="modal fade" id="editModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header py-2">
+                        <div class="">
+                            <h5 class="modal-title">Modifier</h5>
+                            <p class="small text-muted">Modification de informations personnelles</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <input type="hidden" name="id" id="editId">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nom</label>
+                                    <input type="text" class="form-control" name="nom" value="<?= htmlspecialchars($_SESSION['client_nom'] ?? $_SESSION['user_nom'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Téléphone</label>
+                                    <input type="text" class="form-control" name="telephone" value="<?= htmlspecialchars($_SESSION['client_telephone'] ?? $_SESSION['user_telephone'] ?? '-') ?>">
+                                </div>
+                            </div>
+                            <?php if (!isset($_SESSION['client_id'])): ?>
+                            <div class="mb-3">
+                                <label class="form-label">email <span class="small text-danger">*</span></label>
+                                <input type="email" 
+                                class="form-control" 
+                                name="email"
+                                value="<?= htmlspecialchars($_SESSION['user_email'] ?? '') ?>">
+                            </div>
+                            <?php endif; ?>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Commune</label>
+                                    <select class="form-select" name="commune" required>
+                                        <option value="" disabled selected>Sélectionnez une commune</option>
+                                        <optgroup label="Abidjan Nord">
+                                            <option value="Abobo">Abobo</option>
+                                            <option value="Adjamé">Adjamé</option>
+                                            <option value="Attécoubé">Attécoubé</option>
+                                            <option value="Cocody">Cocody</option>
+                                            <option value="Plateau">Plateau</option>
+                                        </optgroup>
+                                        <optgroup label="Abidjan Sud">
+                                            <option value="Koumassi">Koumassi</option>
+                                            <option value="Marcory">Marcory</option>
+                                            <option value="Port-Bouët">Port-Bouët</option>
+                                            <option value="Treichville">Treichville</option>
+                                            <option value="Bingerville">Bingerville</option>
+                                        </optgroup>
+                                        <optgroup label="Abidjan Ouest">
+                                            <option value="Yopougon">Yopougon</option>
+                                            <option value="Songon">Songon</option>
+                                        </optgroup>
+                                        <optgroup label="Abidjan Est">
+                                            <option value="Anyama">Anyama</option>
+                                            <option value="Brofodoumé">Brofodoumé</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Quartier</label>
+                                    <input type="text" class="form-control" name="quartier" <?= htmlspecialchars($_SESSION['client_quartier'] ?? $_SESSION['user_quartier'] ?? '-') ?>>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-custom-primary" id="updateYear">Mettre à jour</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

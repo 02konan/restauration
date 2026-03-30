@@ -1,0 +1,45 @@
+{% endblock %}
+  <!-- LEFT SIDE: INTERFACE 1 (Mes commandes) + INTERFACE 2 (Passer commande) + INTERFACE 3 (Confirmation) 
+    but we combine to replicate full flow but visually show all screens as per design -->
+    <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow position-fixed">
+            <div class="container-fluid d-flex justify-content-center ">
+                <!-- Logo/Brand à gauche -->
+                <!-- <a class="navbar-brand" href="#">
+                    <img class="me-5" src="./logo.png" height="35" alt="">
+                </a> -->
+                
+                <!-- Menu collapse -->
+                <div class="w-100" id="">
+                    <!-- Liens de navigation -->
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="./commande.html"><i class="bi bi-bag-fill"></i> <span class="ms-1">Commandes</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./cart.html"><i class="bi bi-cart bi-simple"></i><i class="bi bi-cart-fill bi-active"></i><span class="ms-1">Panier</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./code.html"><i class="bi bi-ticket bi-simple"></i><i class="bi bi-ticket-fill bi-active"></i> <span class="ms-1">Code promo</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./profile.html"><i class="bi bi-person bi-simple"></i> <i class="bi bi-person-fill bi-active"></i> <span class="ms-1">Profil</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- <div class="btn-group">
+                    <button class="btn btn-sm">S'inscrire</button>
+                    <button class="btn btn-sm btn-dark rounded-pill">Se connecter</button>
+                </div> -->
+            </div>
+        </nav>
+        <div class="d-flex align-items-center gap-2 my-3">
+            <a href="javascript:history.back()" class="return"><i class="bi bi-chevron-left"></i></a><h4 class="fw-bold p-0 m-0">Panier</h4>
+        </div>
+
+        <div class="cart-item d-flex flex-column justify-content-center align-items-center">
+            <i class="bi bi-hourglass-split" style="font-size: 70px !important;"></i>
+            <p class="text-muted mt-2 mb-0">Bientôt disponible.</p>
+        </div>
+    </div>
+    {% endblock %}
