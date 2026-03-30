@@ -278,10 +278,6 @@ h6{
 .modal-backdrop.show {
     opacity: 0.5;
 }
-.background-commande{
-    background: url(../back/back3.png) no-repeat;
-    background-size: cover;
-}
 
 /* desktop grid: two columns for larger screens */
 @media (min-width: 992px) {
