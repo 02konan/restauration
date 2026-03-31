@@ -86,6 +86,26 @@ def api_commandes():
         },
     }), 200
 
+
+@app.route("/commission")
+def commission():
+    commissions = read_commission()
+    unique_commands = len(set(c['id_commande'] for c in commissions))
+    total_com = sum(c['commission'] for c in commissions)
+    return render_template("commission.html", commissions=commissions, unique_commands=unique_commands, total_com=total_com)
+
+@app.route("/api/commissions")
+def api_commissions():
+    commissions = read_commission()
+    unique_commands = len(set(c['id_commande'] for c in commissions))
+    total_com = sum(c['commission'] for c in commissions)
+    return jsonify({
+        "unique_commands": unique_commands,
+        "total_com": total_com,
+        "commissions": commissions
+    })
+
+
 @app.route("/Details")
 def about():
     return render_template("recape.html")
