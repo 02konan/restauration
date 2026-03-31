@@ -154,7 +154,7 @@
             // Préparation des données
             const orderData = {
                 product_name: 'Poulet braisé',
-                CodeCommande: 'CMD-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                CodeCommande: 'CMD-' + new Date().toISOString().slice(0, 19).replace(/[-:]/g, '').replace('T', '-'),
                 quantity: quantity,
                 unit_price: unitPrice,
                 delivery_fee: DELIVERY_FEE,

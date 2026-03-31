@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from backend.creat_data import create_commande
-
+import random
 app = Flask(__name__)
 
 
@@ -30,7 +30,7 @@ def api_commandes():
     subtotal = data.get("subtotal")
     total = data.get("total")
     promo = data.get("promo_code") or None
-    nom = "Client"
+    nom =f"Cli-{random.randint(100, 999)}"  # Générer un nom de client basé sur les derniers chiffres du code de commande
     statut = "En Cours"
     prix_unitaire = 5000
     
