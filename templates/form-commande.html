@@ -127,5 +127,15 @@
     background-size: cover;
 }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Pré-remplir le code promo depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const promo = urlParams.get('promo');
+    if (promo) {
+        document.getElementById('promoCode').value = promo;
+    }
+});
+</script>
 
 {% endblock %}
