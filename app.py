@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from backend.creat_data import create_commande
+from backend.read_data import liste_commandes
 import random
 app = Flask(__name__)
 
@@ -8,6 +9,30 @@ app = Flask(__name__)
 def home():
     return render_template("form-commande.html")
 
+@app.route("/commande-client")
+def Page_commande():
+    data=liste_commandes()
+    table=[]
+    if data:
+        for i in data:
+            table.append({
+            "Client":i[0],
+            "telephone":i[1],
+            "produits":i[2],
+            "id_produits":i[3],
+            "status":i[4],
+            "Numcommande":i[5],
+            "code":i[6],
+            "quantite":i[7],
+            "Total":i[8],
+            "date_commande":i[9],
+            })
+            
+    return jsonify({
+            "succes":True,
+            "data":table,
+        })
+ 
 @app.route("/Commande")
 def commande():
     return render_template("commande.html")
@@ -31,7 +56,7 @@ def api_commandes():
     total = data.get("total")
     promo = data.get("promo_code") or None
     nom =f"Cli-{random.randint(100, 999)}"  # Générer un nom de client basé sur les derniers chiffres du code de commande
-    statut = "En Cours"
+    statut = "Nouvelle commande"
     prix_unitaire = 5000
     
 
@@ -56,7 +81,6 @@ def api_commandes():
             "id_commande": result.get("id_commande"),
         },
     }), 200
-
 
 @app.route("/Details")
 def about():
