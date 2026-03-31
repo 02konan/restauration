@@ -86,7 +86,6 @@ def api_commandes():
         },
     }), 200
 
-
 @app.route("/commission")
 def commission():
     commissions = read_commission(maquis_id= 15)
@@ -105,10 +104,18 @@ def api_commissions():
         "commissions": commissions
     })
 
+@app.route("/code-QR")
+def Page_QR():
+    return render_template("code-qr.html")
 
-@app.route("/Details")
-def about():
-    return render_template("recape.html")
+@app.route("/profile")
+def Page_profile():
+    return render_template("profile.html")
+
+@app.route("/carte")
+def Page_carte():
+    return render_template("cart.html")
+
 
 if __name__ == "__main__":
     app.run(port=5000,debug=True)
