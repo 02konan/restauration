@@ -1,4 +1,5 @@
 from backend.data_base import connexion
+maquis_id = 15
 def liste_commandes():
     try:
         with connexion() as conn:
@@ -17,3 +18,54 @@ def liste_commandes():
     except Exception as e:
         print(f"Erreur lors de la récupération des commandes: {e}")
         return []
+
+
+def read_commission():
+    """Lit les données de la table 'commission' et retourne une liste de dictionnaires."""
+    try:
+        print("Log: Connexion à la base de données...")
+        conn = connexion()
+        print("Log: Connexion réussie.")
+        cursor = conn.cursor()
+        print("Log: Exécution de la requête SQL...")
+        cursor.execute("""
+            SELECT 
+                commandes.id AS id_commande,
+                produits.nom AS nom_produit,
+                300 * ligne_commandes.quantite AS commission,
+                commandes.date_commande,
+                ligne_commandes.quantite
+            FROM 
+                commandes 
+            JOIN 
+                ligne_commandes ON commandes.id = ligne_commandes.id_commande 
+            JOIN 
+                produits ON ligne_commandes.id_produit = produits.id
+            JOIN 
+                maquis ON commandes.code = maquis.code
+            WHERE 
+                maquis.id = %s
+            ORDER BY 
+                commandes.date_commande DESC
+        """, (maquis_id,))
+        print("Log: Requête exécutée, récupération des données...")
+        rows = cursor.fetchall()
+        print(f"Log: {len(rows)} lignes récupérées.")
+        commissions = []
+        for row in rows:
+            commissions.append({
+                'id_commande': row[0],  # Nouveau champ
+                'nom_produit': row[1],  # Était row[0] avant
+                'commission': row[2],   # Était row[1]
+                'date_commande': row[3], # Était row[2]
+                'quantite': row[4]      # Était row[3]
+            })
+        print(f"Log: {len(commissions)} commissions traitées.")
+        return commissions
+    except Exception as e:
+        print(f"Erreur lors de la lecture des commissions: {e}")
+        return []
+    finally:
+        cursor.close()
+        conn.close()
+        print("Log: Connexion fermée.")
