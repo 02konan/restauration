@@ -18,6 +18,22 @@ def liste_commandes():
         print(f"Erreur lors de la récupération des commandes: {e}")
         return []
 
+def get_maquis_code(maquis_id):
+    """Récupère le code du maquis par ID."""
+    try:
+        conn = connexion()
+        cursor = conn.cursor()
+        cursor.execute("SELECT code FROM maquis WHERE id = %s", (maquis_id,))
+        row = cursor.fetchone()
+        code = row[0] if row else None
+        return code
+    except Exception as e:
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+
+
 def read_commission(maquis_id):
     """Lit les données de la table 'commission' et retourne une liste de dictionnaires."""
     try:
