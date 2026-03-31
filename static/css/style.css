@@ -35,6 +35,9 @@ hr {
 .required{
     color: var(--orange);
 }
+i{
+    margin: 0 !important;
+}
 .form-control:focus, .form-select:focus{
     border: none !important;
     outline: none !important;

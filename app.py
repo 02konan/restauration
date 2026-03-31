@@ -7,7 +7,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("form-commande.html")
+    # if request.method["POST"]:
+    #     id=request.form.get('')
+    return render_template("all-commandes.html")
 
 @app.route("/commande-client")
 def Page_commande():
