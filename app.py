@@ -7,8 +7,10 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    # if request.method["POST"]:
-    #     id=request.form.get('')
+    return render_template("form-commande.html")
+
+@app.route("/Dashbord")
+def Page_Dashboard():
     return render_template("all-commandes.html")
 
 @app.route("/commande-client")
