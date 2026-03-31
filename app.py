@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from backend.creat_data import create_commande
-from backend.read_data import liste_commandes,read_commission
+from backend.read_data import liste_commandes,read_commission,get_maquis_code
 import random
 app = Flask(__name__)
 
@@ -104,9 +104,14 @@ def api_commissions():
         "commissions": commissions
     })
 
-@app.route("/code-QR")
-def Page_QR():
-    return render_template("code-qr.html")
+@app.route("/code-qr")
+def code_qr():
+    maquis_code = get_maquis_code(15)
+    return render_template("code-qr.html", maquis_code=maquis_code)
+
+@app.route("/form-commande")
+def form_commande():
+    return render_template("form-commande.html")
 
 @app.route("/profile")
 def Page_profile():
