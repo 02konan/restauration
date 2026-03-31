@@ -107,14 +107,14 @@
                         });
                         
                         // Animation si nouvelle donnée
-                        const newHeight = listContainer.scrollHeight;
-                        if (oldHeight !== newHeight) {
-                            listContainer.style.opacity = '0';
-                            setTimeout(() => {
-                                listContainer.style.transition = 'opacity 0.3s';
-                                listContainer.style.opacity = '1';
-                            }, 100);
-                        }
+                        // const newHeight = listContainer.scrollHeight;
+                        // if (oldHeight !== newHeight) {
+                        //     listContainer.style.opacity = '0';
+                        //     setTimeout(() => {
+                        //         listContainer.style.transition = 'opacity 0.3s';
+                        //         listContainer.style.opacity = '1';
+                        //     }, 100);
+                        // }
                     } else {
                         listContainer.innerHTML = '<div class="text-center p-4">Aucune commission pour le moment</div>';
                     }
