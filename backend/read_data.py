@@ -1,5 +1,4 @@
 from backend.data_base import connexion
-maquis_id = 15
 def liste_commandes():
     try:
         with connexion() as conn:
@@ -19,8 +18,7 @@ def liste_commandes():
         print(f"Erreur lors de la récupération des commandes: {e}")
         return []
 
-
-def read_commission():
+def read_commission(maquis_id):
     """Lit les données de la table 'commission' et retourne une liste de dictionnaires."""
     try:
         print("Log: Connexion à la base de données...")

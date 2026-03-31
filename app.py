@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from backend.creat_data import create_commande
-from backend.read_data import liste_commandes
+from backend.read_data import liste_commandes,read_commission
 import random
 app = Flask(__name__)
 
@@ -89,14 +89,14 @@ def api_commandes():
 
 @app.route("/commission")
 def commission():
-    commissions = read_commission()
+    commissions = read_commission(maquis_id= 15)
     unique_commands = len(set(c['id_commande'] for c in commissions))
     total_com = sum(c['commission'] for c in commissions)
     return render_template("commission.html", commissions=commissions, unique_commands=unique_commands, total_com=total_com)
 
 @app.route("/api/commissions")
 def api_commissions():
-    commissions = read_commission()
+    commissions = read_commission(maquis_id= 15)
     unique_commands = len(set(c['id_commande'] for c in commissions))
     total_com = sum(c['commission'] for c in commissions)
     return jsonify({
