@@ -3,147 +3,99 @@
   <!-- LEFT SIDE: INTERFACE 1 (Mes commandes) + INTERFACE 2 (Passer commande) + INTERFACE 3 (Confirmation) 
        but we combine to replicate full flow but visually show all screens as per design -->
 <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow position-fixed">
-        <div class="container-fluid d-flex justify-content-center ">
-            <!-- Logo/Brand à gauche -->
-            <!-- <a class="navbar-brand" href="#">
-                <img class="me-5" src="./logo.png" height="35" alt="">
-            </a> -->
-            
-            <!-- Menu collapse -->
-            <div class="w-100" id="">
-                <!-- Liens de navigation -->
-                <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./commission.html"><i class="bi bi-bag-fill"></i> <span class="ms-1">Commissions</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./code-qr.html"><i class="bi bi-qr-code"></i><span class="ms-1">Mon code Qr</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./profile.html"><i class="bi bi-person bi-simple"></i> <i class="bi bi-person-fill bi-active"></i> <span class="ms-1">Profil</span></a>
-                    </li>
-                </ul>
-            </div>
-            <!-- <div class="btn-group">
-                <button class="btn btn-sm">S'inscrire</button>
-                <button class="btn btn-sm btn-dark rounded-pill">Se connecter</button>
-            </div> -->
-        </div>
-    </nav>
+    
     <div class="container-fluid d-flex">
         <p class="text-muted ms-auto user">user0789567898</p>
     </div>
     <div class="container-fluid p-0 banner">
         <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
-        <a href="./form-commande.html" class="btn btn-custom-primary rounded-pill">
+        <!-- <a href="./form-commande.html" class="btn btn-custom-primary rounded-pill">
             Commandez <i class="bi bi-arrow-right-circle-fill ms-3"></i>
-        </a>
-        <img src="./assets/back/back0.png" alt="">
+        </a> -->
+        <img src="{{ url_for('static', filename='back/back0.png') }}" alt="">
+    </div>
+
+    <div class="container-fluid p-0 d-flex gap-2">
+        <div class="col commission-items">
+            <h3>{{ unique_commands }}</h3>
+            <p class="small text-muted">Commandes</p>
+        </div>
+        <div class="col commission-items">
+            <h3>{{ total_com }} F</h3>
+            <p class="small text-muted">Commission du</p>
+        </div>
     </div>
 
     <div class="d-flex justify-content-between align-items-center my-3 subtitle">
-        <h4 class="fw-bold">Mes commandes</h4>
-        <span class="text-muted">Toutes mes commandes</span>
+        <h4 class="fw-bold">Mes Commissions</h4>
+        <span class="text-muted">Toutes mes commission</span>
     </div>
 
     <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande">
-        <div class="order-item shadow-sm">
-            <div class="content w-100 d-flex gap-3">
-                <div class="image">
-                    <img src="./assets/back/back0.png" alt="">
-                </div>
-                <div class="text d-flex flex-column ">
-                    <h3 class="">Poulet braisé <span class="dot dot-pending"><i class="bi bi-dash-circle-fill"></i></span></h3>
-                    <div class="small text-muted desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
-                    <div class="price-tag">9.500 F</div>
-                </div>
-                <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                    <p class="small text-muted date">22 mars 2026</p>
-                    <p class="quantity ms-auto">2</p>
-                </div>
+    {% for commission in commissions %}
+    <div class="order-item shadow-sm">
+        <div class="content w-100 d-flex gap-3">
+            <div class="image">
+                <img src="{{ url_for('static', filename='back/back0.png') }}" alt="">
             </div>
-        </div>
-        <div class="order-item shadow-sm">
-            <div class="content w-100 d-flex gap-3">
-                <div class="image">
-                    <img src="./assets/back/back0.png" alt="">
-                </div>
-                <div class="text d-flex flex-column ">
-                    <h3 class="">Poulet braisé <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
-                    <div class="small text-muted desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
-                    <div class="price-tag">13.500 F</div>
-                </div>
-                <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                    <p class="small text-muted date">14 Fév 2026</p>
-                    <p class="quantity ms-auto">3</p>
-                </div>
+            <div class="text d-flex flex-column ">
+                <h3>{{ commission.nom_produit }} <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
+                <div class="small text-muted desc">Commission pour ce produit</div>
+                <div class="price-tag">{{ commission.commission }} F</div>
             </div>
-        </div>
-        <div class="order-item shadow-sm">
-            <div class="content w-100 d-flex gap-3">
-                <div class="image">
-                    <img src="./assets/back/back0.png" alt="">
-                </div>
-                <div class="text d-flex flex-column ">
-                    <h3 class="">Poulet braisé <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
-                    <div class="small text-muted desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
-                    <div class="price-tag">5.500 F</div>
-                </div>
-                <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                    <p class="small text-muted date">02 Fév 2026</p>
-                    <p class="quantity ms-auto">1</p>
-                </div>
-            </div>
-        </div>
-        <div class="order-item shadow-sm">
-            <div class="content w-100 d-flex gap-3">
-                <div class="image">
-                    <img src="./assets/back/back0.png" alt="">
-                </div>
-                <div class="text d-flex flex-column ">
-                    <h3 class="">Poulet braisé <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
-                    <div class="small text-muted desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
-                    <div class="price-tag">9.500 F</div>
-                </div>
-                <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                    <p class="small text-muted date">22 mars 2026</p>
-                    <p class="quantity ms-auto">2</p>
-                </div>
-            </div>
-        </div>
-        <div class="order-item shadow-sm">
-            <div class="content w-100 d-flex gap-3">
-                <div class="image">
-                    <img src="./assets/back/back0.png" alt="">
-                </div>
-                <div class="text d-flex flex-column ">
-                    <h3 class="">Poulet braisé <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
-                    <div class="small text-muted desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
-                    <div class="price-tag">9.500 F</div>
-                </div>
-                <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                    <p class="small text-muted date">22 mars 2026</p>
-                    <p class="quantity ms-auto">2</p>
-                </div>
-            </div>
-        </div>
-        <div class="order-item shadow-sm">
-            <div class="content w-100 d-flex gap-3">
-                <div class="image">
-                    <img src="./assets/back/back0.png" alt="">
-                </div>
-                <div class="text d-flex flex-column ">
-                    <h3 class="">Poulet braisé <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
-                    <div class="small text-muted desc">Du bon poulet braisé accompagné d'une boule d'attitété</div>
-                    <div class="price-tag">9.500 F</div>
-                </div>
-                <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                    <p class="small text-muted date">22 mars 2026</p>
-                    <p class="quantity ms-auto">2</p>
-                </div>
+            <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                <p class="small text-muted date">{{ commission.date_commande.strftime('%d %b %Y') if commission.date_commande else 'N/A' }}</p>
+                <p class="quantity ms-auto">{{ commission.quantite }}</p>
             </div>
         </div>
     </div>
+    {% endfor %}
 </div>
-{% endblock %}
+</div>
+<!-- <footer>Du Bon Poulet Braisé — Commandez et gagnez des commissions avec votre code promo</footer> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Log JS: Chargement de la page commission...');
+    fetch('/api/commissions')
+        .then(response => {
+            console.log('Log JS: Réponse reçue de l\'API...');
+            return response.json();
+        })
+        .then(data => {
+            console.log('Log JS: Données reçues:', data);
+            // Mettre à jour les compteurs
+            document.querySelector('.commission-items h3').textContent = data.unique_commands;
+            document.querySelector('.commission-items:nth-child(2) h3').textContent = data.total_com + ' F';
+            // Mettre à jour la liste des commissions
+            const listContainer = document.querySelector('.list-commande');
+            listContainer.innerHTML = '';
+            data.commissions.forEach(commission => {
+                const item = document.createElement('div');
+                item.className = 'order-item shadow-sm';
+                item.innerHTML = `
+                    <div class="content w-100 d-flex gap-3">
+                        <div class="image">
+                            <img src="{{ url_for('static', filename='back/back0.png') }}" alt="">
+                        </div>
+                        <div class="text d-flex flex-column">
+                            <h3>${commission.nom_produit} <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
+                            <div class="small text-muted desc">Commission pour ce produit</div>
+                            <div class="price-tag">${commission.commission} F</div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                            <p class="small text-muted date">${commission.date_commande ? new Date(commission.date_commande).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</p>
+                            <p class="quantity ms-auto">${commission.quantite}</p>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+            console.log('Log JS: Données affichées.');
+        })
+        .catch(error => {
+            console.error('Log JS: Erreur lors du chargement des données:', error);
+        });
+});
+</script>
+ {% endblock %}
+
