@@ -327,12 +327,18 @@ h6{
     font-weight: 500;
 }
 
-.order-item, .commission-item , .card-commande-item, .card-code-qr, .cart-item{
+.card-commande-item, .card-code-qr, .cart-item{
     background: var(--white);
     border-radius: 16px;
     padding: 14px 16px;
     margin-bottom: 14px;
     animation: slide 0.3s ease;
+}
+.order-item, .commission-item {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
 }
 .card-commande-item.partner{
     padding: 40px;
@@ -771,12 +777,19 @@ i.bi {
         transform: translateX(-50%);
         z-index: 1;
     }
-    .order-item, .commission-item, .card-commande-item, .card-code-qr {
+    .card-commande-item, .card-code-qr {
         background: var(--white);
         border-radius: 10px;
         padding: 10px;
         margin-bottom: 0 !important;
         animation: slide 0.3s ease;
+
+    }
+    .order-item, .commission-item {
+        background: var(--white);
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 0 !important;
 
     }
     

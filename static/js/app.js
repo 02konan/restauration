@@ -25,13 +25,17 @@ function afficheCommande(commande) {
 
         let couleur = "";
         let icon = "";
+        let classe = "";
         if (cmd.status === "Nouvelle commande") {
+            classe = 'dot-pending'
             couleur = "text-warning";
             icon = "bi-clock-history";
         } else if (cmd.status === "En preparation") {
+            classe = 'dot-info'
             couleur = "text-info";
             icon = "bi-arrow-repeat";
         } else {
+            classe = 'dot-success'
             couleur = "text-success";
             icon = "bi-check-circle-fill";
         }
@@ -48,7 +52,7 @@ function afficheCommande(commande) {
                 <div class="text d-flex flex-column flex-grow-1">
                     <div class="d-flex align-items-center gap-2">
                         <h3 class="mb-0">${cmd.produits}</h3>
-                        <span class="dot dot-info" title="${cmd.status}">
+                        <span class="dot ${classe}" title="${cmd.status}">
                             <i class="bi ${icon}"></i>
                         </span>
                     </div>

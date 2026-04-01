@@ -284,7 +284,7 @@
             locateBtn.addEventListener('click', () => {
                 if (navigator.geolocation) {
                     // Afficher le spinner
-                    locateBtn.innerHTML = '<i class="bi bi-arrow-repeat" style="animation: spin 1s linear infinite;"></i>';
+                    locateBtn.innerHTML = '<i class="bi bi-arrow-repeat" style="animation: spin 1s linear infinite;"></i>Ma Position';
                     locateBtn.disabled = true; // Désactiver le bouton pendant le chargement
                     
                     navigator.geolocation.getCurrentPosition(async (position) => {
