@@ -10,7 +10,7 @@ app_key="Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix"
 
 @app.route("/")
 def home():
-    return render_template("login.html")
+    return render_template("form-commande.html")
 
 @app.route("/login")
 def login():
