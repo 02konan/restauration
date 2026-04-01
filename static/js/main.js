@@ -1,5 +1,5 @@
 
- 
+
         // === GESTION DU TOAST DE BIENVENUE AVEC LOCALSTORAGE ===
         document.addEventListener('DOMContentLoaded', function() {
             const hasVisited = localStorage.getItem('hasVisitedBefore');
@@ -31,12 +31,12 @@
         let currentQuantity = 1;
         
         // Éléments DOM
-        const quantityDisplay = document.getElementById('quantityDisplay');
         const displayQuantity = document.getElementById('displayQuantity');
         const subtotalElement = document.getElementById('subtotal');
         const totalElement = document.getElementById('totalAmount');
         const decrementBtn = document.getElementById('decrementBtn');
         const incrementBtn = document.getElementById('incrementBtn');
+        const quantityInput = document.getElementById('quantity');
         
         // Éléments hidden
         const hiddenQuantity = document.getElementById('hiddenQuantity');
@@ -54,41 +54,53 @@
             const subtotal = UNIT_PRICE * currentQuantity;
             const total = subtotal + DELIVERY_FEE;
             
-            quantityDisplay.textContent = currentQuantity;
             displayQuantity.textContent = currentQuantity;
             subtotalElement.textContent = formatPrice(subtotal);
             totalElement.textContent = formatPrice(total);
             
             hiddenQuantity.value = currentQuantity;
+            hiddenUnitPrice.value = UNIT_PRICE;
             hiddenSubtotal.value = subtotal;
             hiddenTotal.value = total;
         }
         
         // Événements des boutons
-        incrementBtn.addEventListener('click', () => {
-            currentQuantity++;
-            updateOrderSummary();
-        });
-        
-        decrementBtn.addEventListener('click', () => {
-            if (currentQuantity > 1) {
-                currentQuantity--;
+        if (incrementBtn) {
+            incrementBtn.addEventListener('click', () => {
+                currentQuantity++;
                 updateOrderSummary();
-            } else {
-                decrementBtn.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    decrementBtn.style.transform = '';
-                }, 200);
-                
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Quantité minimale',
-                    text: 'La quantité ne peut pas être inférieure à 1',
-                    confirmButtonColor: '#dc3545',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            }
+            });
+        }
+        
+        if (decrementBtn) {
+            decrementBtn.addEventListener('click', () => {
+                if (currentQuantity > 1) {
+                    currentQuantity--;
+                    updateOrderSummary();
+                } else {
+                    decrementBtn.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        decrementBtn.style.transform = '';
+                    }, 200);
+                    
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Quantité minimale',
+                        text: 'La quantité ne peut pas être inférieure à 1',
+                        confirmButtonColor: '#dc3545',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+        
+        // Événement pour l'input quantité
+        quantityInput.addEventListener('input', () => {
+            currentQuantity = parseInt(quantityInput.value) || 1;
+            if (currentQuantity < 1) currentQuantity = 1;
+            quantityInput.value = currentQuantity;
+            updateOrderSummary();
         });
         
         // Soumission du formulaire
@@ -97,18 +109,20 @@
         orderForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+            const deliveryAddress = document.getElementById('lieu').value.trim();
             const contactPhone = document.getElementById('contactPhone').value.trim();
             const promoCode = document.getElementById('promoCode').value.trim();
             const quantity = parseInt(hiddenQuantity.value);
             const unitPrice = parseInt(hiddenUnitPrice.value);
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
             
             // Validation
             if (!deliveryAddress) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Champ manquant',
-                    text: 'Veuillez indiquer la commune de livraison',
+                    text: 'Veuillez indiquer le lieu de livraison',
                     confirmButtonColor: '#dc3545'
                 });
                 return;
@@ -137,14 +151,12 @@
 
             // Validation du code promo (facultatif)
             if (promoCode) {
-                // format requis : 8 caractères au total, 1 lettre + '-' + 2 lettres + '-' + 3 chiffres
-                // exemples valides : C-YO-078, G-CE-045
-                const strictPromoRegex = /^[A-Z]-[A-Z]{2}-\d{3}$/;
+                const strictPromoRegex = /^[A-Z]{4}\d{4}$/;
                 if (!strictPromoRegex.test(promoCode.toUpperCase())) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Code promo invalide',
-                        html: 'Le code promo doit être au format <strong>C-YO-078</strong> ou <strong>G-CE-045</strong> (8 caractères, derniers 3 chiffres).',
+                        html: 'Le code promo doit être au format <strong>CCOD1002</strong> (8 caractères, 4 lettres suivies de 4 chiffres).',
                         confirmButtonColor: '#dc3545'
                     });
                     return;
@@ -158,11 +170,12 @@
                 quantity: quantity,
                 unit_price: unitPrice,
                 delivery_fee: DELIVERY_FEE,
-                subtotal: parseInt(hiddenSubtotal.value),
                 total: (unitPrice * quantity) + DELIVERY_FEE,
                 delivery_address: deliveryAddress,
                 contact_phone: contactPhone,
                 promo_code: promoCode || null,
+                latitude: latitude || null,
+                longitude: longitude || null,
                 order_date: new Date().toISOString(),
                 visit_count: localStorage.getItem('visitCount') || 1
             };
@@ -195,7 +208,7 @@
                         title: 'Commande validée !',
                         html: `
                             <div class="text-start">
-                                <p><strong>N° commande:</strong> ${result.order.CodeCommande}</p>
+                                <p><strong>N° commande:</strong>${result.order.CodeCommande}</p>
                                 <p><strong>Montant total:</strong> ${formatPrice((unitPrice * quantity) + DELIVERY_FEE)}</p>
                                 <p><strong>Lieu de livraison:</strong> ${deliveryAddress}</p>
                                 <p class="mt-2">Un commercial vous contactera pour validation dans quelques minutes.</p>
@@ -230,13 +243,15 @@
         // Animation des boutons
         const allCountBtns = document.querySelectorAll('.count-btn');
         allCountBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                if (!this.id) return;
-                this.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-            });
+            if (btn) {
+                btn.addEventListener('click', function(e) {
+                    if (!this.id) return;
+                    this.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            }
         });
         
         // Formatage du téléphone
@@ -251,23 +266,65 @@
             }
         });
 
-        // Formatage du code promo à la volée (majuscule, format fixe)
+        // Formatage du code promo à la volée (4 lettres + 4 chiffres)
         const promoInput = document.getElementById('promoCode');
         promoInput.addEventListener('input', (e) => {
             let raw = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            // on attend 1 lettre + 2 lettres + 3 chiffres -> 6 caractères "bruts"
-            if (raw.length > 6) raw = raw.slice(0, 6);
-
-            // extraire composants et forcer types
-            const letter = raw.slice(0, 1).replace(/[^A-Z]/g, '');
-            const letters = raw.slice(1, 3).replace(/[^A-Z]/g, '');
-            const digits = raw.slice(3, 6).replace(/[^0-9]/g, '');
-
-            let formatted = '';
-            if (letter) formatted += letter;
-            if (letters.length > 0) formatted += '-' + letters;
-            if (digits.length > 0) formatted += '-' + digits;
-
-            e.target.value = formatted;
+            if (raw.length > 8) raw = raw.slice(0, 8);
+            // Séparer les lettres (premiers 4) et chiffres (derniers 4)
+            let letters = raw.slice(0, 4).replace(/[^A-Z]/g, '');
+            let digits = raw.slice(4, 8).replace(/[^0-9]/g, '');
+            e.target.value = letters + digits;
         });
 
+        // Géolocalisation
+        const locateBtn = document.getElementById('locate-commande');
+        if (locateBtn) {
+            const originalIcon = locateBtn.innerHTML;
+            locateBtn.addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    // Afficher le spinner
+                    locateBtn.innerHTML = '<i class="bi bi-arrow-repeat" style="animation: spin 1s linear infinite;"></i>';
+                    locateBtn.disabled = true; // Désactiver le bouton pendant le chargement
+                    
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        try {
+                            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                            const data = await response.json();
+                            const address = data.display_name || `Latitude: ${lat}, Longitude: ${lng}`;
+                            document.getElementById('lieu').value = address;
+                            document.getElementById('latitude').value = lat;
+                            document.getElementById('longitude').value = lng;
+                        } catch (error) {
+                            console.error('Erreur de géocodage inverse:', error);
+                            document.getElementById('lieu').value = `Latitude: ${lat}, Longitude: ${lng}`;
+                            document.getElementById('latitude').value = lat;
+                            document.getElementById('longitude').value = lng;
+                        } finally {
+                            // Restaurer l'icône originale
+                            locateBtn.innerHTML = originalIcon;
+                            locateBtn.disabled = false;
+                        }
+                    }, (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur de localisation',
+                            text: 'Impossible d\'obtenir votre position.',
+                            confirmButtonColor: '#dc3545'
+                        });
+                        // Restaurer l'icône originale
+                        locateBtn.innerHTML = originalIcon;
+                        locateBtn.disabled = false;
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Géolocalisation non supportée',
+                        text: 'Votre navigateur ne supporte pas la géolocalisation.',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        }

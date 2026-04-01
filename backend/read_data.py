@@ -4,7 +4,9 @@ def liste_commandes():
         with connexion() as conn:
             with conn.cursor() as cursor:
                 cursor.execute("""
-                SELECT clients.nom,clients.telephone,produits.nom as produits,produits.id as id_produit,commandes.statut,commandes.Numcode,commandes.code,ligne_commandes.quantite,ligne_commandes.Total,commandes.date_commande as date_commande
+                SELECT clients.nom,clients.telephone,commandes.id as id_commande,produits.nom as produits,produits.id as id_produit,commandes.statut,
+                commandes.Numcode,commandes.code,
+                ligne_commandes.quantite,ligne_commandes.Total,commandes.date_commande as date_commande,commandes.Commune as lieu
                 FROM ligne_commandes
                 JOIN produits on ligne_commandes.id_produit=produits.id
                 JOIN commandes on ligne_commandes.id_commande=commandes.id

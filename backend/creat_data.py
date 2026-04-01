@@ -21,3 +21,16 @@ def create_commande(nom, telephone,Numcode ,code, statut,commune,prix_unitaire,q
         error_message = str(e)
         print(f"An error occurred: {error_message}")
         return {"success": False, "error": error_message}
+
+def update_commande(id_commande, status):
+    try:
+        with connexion() as conn:
+            with conn.cursor() as cursor:
+                sql = "UPDATE `commandes` SET `statut` = %s, `date_modification` = NOW() WHERE `id` = %s"
+                cursor.execute(sql, (status, id_commande))
+            conn.commit()
+            return {"success": True}
+    except Exception as e:
+        error_message = str(e)
+        print(f"An error occurred: {error_message}")
+        return {"success": False, "error": error_message}

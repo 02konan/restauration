@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from backend.creat_data import create_commande
+from backend.creat_data import create_commande,update_commande
 from backend.read_data import liste_commandes,read_commission,get_maquis_code
 import random
 app = Flask(__name__)
@@ -9,8 +9,13 @@ app = Flask(__name__)
 def home():
     return render_template("form-commande.html")
 
-@app.route("/Dashbord")
+@app.route("/Dashboard",methods=["POST","GET"])
 def Page_Dashboard():
+    if request.method == "POST":
+        status = request.form.get("Traiter") or request.form.get("Livrer")
+        id_commande = request.form.get("id_commande")
+        update_commande(id_commande, status)
+        return redirect(url_for("Page_Dashboard"))
     return render_template("all-commandes.html")
 
 @app.route("/commande-client")
@@ -22,14 +27,16 @@ def Page_commande():
             table.append({
             "Client":i[0],
             "telephone":i[1],
-            "produits":i[2],
-            "id_produits":i[3],
-            "status":i[4],
-            "Numcommande":i[5],
-            "code":i[6],
-            "quantite":i[7],
-            "Total":i[8],
-            "date_commande":i[9],
+            "id_commande":i[2],
+            "produits":i[3],
+            "id_produits":i[4],
+            "status":i[5],
+            "Numcommande":i[6],
+            "code":i[7],
+            "quantite":i[8],
+            "Total":i[9],
+            "date_commande":i[10],
+            "lieu":i[11],
             })
             
     return jsonify({
