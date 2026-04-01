@@ -5,9 +5,15 @@ import random
 app = Flask(__name__)
 
 
+
+
 @app.route("/")
 def home():
     return render_template("form-commande.html")
+
+# @app.route("/form-commande")
+# def form_commande():
+#     return render_template("form-commande.html")
 
 @app.route("/Dashboard",methods=["POST","GET"])
 def Page_Dashboard():
@@ -50,7 +56,6 @@ def commande():
 
 @app.route('/inscriptionPartenaire')
 def partenaire():
-    """Page d'inscription pour les maquis partenaires IFSM."""
     return render_template('inscription-partner.html')
 
 @app.route("/api/actionCommande", methods=["POST"])
@@ -116,9 +121,9 @@ def code_qr():
     maquis_code = get_maquis_code(15)
     return render_template("code-qr.html", maquis_code=maquis_code)
 
-@app.route("/form-commande")
-def form_commande():
-    return render_template("form-commande.html")
+# @app.route("/form-commande")
+# def form_commande():
+#     return render_template("form-commande.html")
 
 @app.route("/profile")
 def Page_profile():
