@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     commandeClient()
-    setInterval(commandeClient,30000)
+    setInterval(commandeClient,5000)
 });
 function commandeClient() {
     fetch("/commande-client")

@@ -530,12 +530,15 @@ i.bi {
 .count-btn {
     display: flex;
     color: var(--cream);
-    width: 50px;
-    height: 50px;
+    /* width: 100px; */
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 30px;
     justify-content: center;
     align-items: center;
     background: var(--orange);
-    border-radius: 5px;
+    border-radius: 5px ;
+    gap: 10px;
 }
 .count-number{
     color: var(--text-color);
@@ -921,7 +924,7 @@ i.bi {
         align-items: center;
         background: var(--orange);
     }
-    .count-btn {
+    /* .count-btn {
         display: flex;
         color: var(--cream);
         width: 30px;
@@ -930,7 +933,7 @@ i.bi {
         align-items: center;
         background: var(--orange);
         border-radius: 5px;
-    }
+    } */
     .count-number{
         color: var(--text-color);
         background-color: var(--white);
