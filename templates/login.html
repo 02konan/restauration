@@ -1,0 +1,325 @@
+ {% extends 'base.html' %}
+   {% block content %}
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --cream: #FFF5E1;
+            --text-color: #1C1C1C;
+            --orange: #FF6B00;
+            --red: #C0392B;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+        }
+        .form-control, .btn{
+            font-size: 12px;
+        }
+        .login-container {
+            height: 100vh;
+        }
+
+        /* Partie gauche (image) */
+        .food-side {
+            background: url(../static/back/back3.png) center/cover no-repeat;
+            position: relative;
+        }
+
+        .food-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .food-text {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: white;
+        }
+
+        /* Formulaire */
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-control {
+            background: #f3f3f3;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .form-control:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 0 0.2rem rgba(255,107,0,0.25);
+        }
+
+        .btn-orange {
+            background-color: var(--orange);
+            color: white;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        .btn-orange:hover {
+            background-color: #e65c00;
+        }
+
+        .link-red {
+            color: var(--red);
+            text-decoration: none;
+        }
+
+        .link-red:hover {
+            text-decoration: underline;
+        }
+
+        
+
+        /* Alertes */
+        .alert-custom {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #059669;
+        }
+
+        .alert i {
+            font-size: 18px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        .food-login{
+            background: #ffffff;
+        }
+        .form-title{
+            position: absolute;
+            margin-bottom: auto;
+            font-size: 15px;
+            color: #CCCCCC;
+            top: 20px;
+            right: 20px;
+        }
+        .food-text h2{
+            font-family: "Montserrat", sans-serif;
+            font-size: 45px;
+            font-weight: 900;
+            color: var(--cream);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .food-side {
+                position: absolute;
+                display: block !important;
+                height: 100vh;
+                top:0;
+                left: 0;
+                z-index: 1;
+                padding: 0 !important;
+            }
+            .food-text {
+                padding: 10px;
+                top: 200px;
+                left: 0px;
+                color: white;
+            }
+
+            .food-text h2{
+               font-family: "Montserrat", sans-serif;
+               font-size: 30px;
+               font-weight: 900;
+               color: var(--cream);
+            }
+
+            .food-login{
+                background: #ffffff;
+                /* backdrop-filter: blur(10px); */
+                z-index: 2;
+                height:55vh;
+                margin-top: auto;
+                border-radius: 30px 30px 0 0;
+                box-shadow: 0 0 14px #5e330f;
+            }
+            .form-title{
+                display: none;
+            }
+        }
+    </style>
+<div class="container-fluid login-container">
+    <div class="row h-100">
+
+        <!-- IMAGE SIDE -->
+        <div class="col-md-6 food-side">
+            <div class="food-overlay"></div>
+            <div class="food-text">
+                <h2>Du bon poulet braisé</h2>
+                <p>Commandez vos poulets braisés en quelques clics</p>
+            </div>
+        </div>
+
+        <!-- FORM SIDE -->
+        <div class="col-md-6 d-flex food-login align-items-center justify-content-center">
+            
+            <div class="login-card">
+                <!-- Message d'alerte (caché par défaut) -->
+                <div id="loginAlert" class="alert-custom alert-error" style="display: none;">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <span id="alertMessage">Email ou mot de passe incorrect</span>
+                </div>
+                <form id="formLogin" onsubmit="handleLogin(event)">
+                    <!-- Si c'est un client -->
+                    <!-- <div class="mb-3">
+                        <label class="form-label">Numéro de téléphone</label>
+                        <input type="text" class="form-control" name="telephone" placeholder="Entrez votre numéro...">
+                            <div id="telephoneHelp" class="form-text">Entrez un numéro déjà utiliser pour commander</div>
+                    </div> -->
+                    <!-- Fin Si c'est un client -->
+                    
+                    <!-- Si c'est un admin -->
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" class="form-control" name="email" placeholder="Entrez votre email...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" name="password" placeholder="Entrez votre mot de passe">
+                    </div>
+                    <!-- <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Se souvenir</label>
+                        </div>
+                        <a href="#" class="link-red ms-auto">Mot de passe oublié ?</a>
+                    </div> -->
+                    
+                    <!-- Fin Si c'est un admin -->
+
+                    <button type="submit" id="loginButton" class="btn btn-orange w-100 mb-3 rounded-pill">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <span id="buttonText">Se connecter</span>
+                    </button>
+
+                    <!-- Si c'est un admin -->
+                        <!-- <p class="text-center">
+                            Je suis un client
+                            <a href="/login" class="link-red">Se connecter autrement?</a>
+                        </p> -->
+                    <!-- Fin Si c'est un admin -->
+
+                    <!-- Si c'est un client -->
+                        <p class="text-center">
+                            Je ne suis pas un client
+                            <a href="/login" class="link-red">Se connecter autrement?</a>
+                        </p>
+                    <!-- Fin Si c'est un client -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function handleLogin(event) {
+        event.preventDefault();
+        
+        const form = document.getElementById('formLogin');
+        const formData = new FormData(form);
+        const telephone = formData.get('telephone');
+        
+        // Validation côté client
+        if (!telephone || telephone.trim() === '') {
+            showAlert('error', 'Veuillez saisir votre numéro de téléphone');
+            return;
+        }
+        
+        const button = document.getElementById('loginButton');
+        
+        // Désactiver le bouton et montrer le loading
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner"></span><span>Connexion...</span>';
+        
+        fetch('api/login.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            // Vérifier si la réponse est OK
+            if (!response.ok) {
+                throw new Error('Erreur réseau');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+                // Sauvegarder le téléphone dans le localStorage
+                localStorage.setItem('telephone', telephone);
+                // Afficher le message de succès
+                showAlert('success', data.message);
+                // Redirection après 1 seconde
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 1000);
+            } else {
+                // Réactiver le bouton
+                button.disabled = false;
+                button.innerHTML = '<i class="bi bi-box-arrow-in-right"></i><span>Se connecter</span>';
+                showAlert('error', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête:', error);
+            button.disabled = false;
+            button.innerHTML = '<i class="bi bi-box-arrow-in-right"></i><span>Se connecter</span>';
+            showAlert('error', 'Erreur de connexion au serveur. Veuillez réessayer.');
+        });
+    }
+
+    // Afficher les alertes
+    function showAlert(type, message) {
+        const alertBox = document.getElementById('loginAlert');
+        const alertMessage = document.getElementById('alertMessage');
+        
+        alertBox.className = 'alert-custom ' + (type === 'success' ? 'alert-success' : 'alert-error');
+        alertMessage.textContent = message;
+        alertBox.style.display = 'flex';
+        
+        // Cacher après 3 secondes
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 3000);
+    }
+</script>
+{% endblock %}

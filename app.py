@@ -3,13 +3,18 @@ from backend.creat_data import create_commande,update_commande
 from backend.read_data import liste_commandes,read_commission,get_maquis_code
 import random
 app = Flask(__name__)
+app_key="Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix"
 
 
 
 
 @app.route("/")
 def home():
-    return render_template("form-commande.html")
+    return render_template("login.html")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 # @app.route("/form-commande")
 # def form_commande():
@@ -120,10 +125,6 @@ def api_commissions():
 def code_qr():
     maquis_code = get_maquis_code(15)
     return render_template("code-qr.html", maquis_code=maquis_code)
-
-# @app.route("/form-commande")
-# def form_commande():
-#     return render_template("form-commande.html")
 
 @app.route("/profile")
 def Page_profile():
