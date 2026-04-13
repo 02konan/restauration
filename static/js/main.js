@@ -28,7 +28,7 @@
         // Configuration des prix
         const UNIT_PRICE = 5000;
         const DELIVERY_FEE = 0;
-        let currentQuantity = 1;
+        let currentQuantity = 0;
         
         // Éléments DOM
         const displayQuantity = document.getElementById('displayQuantity');
@@ -96,17 +96,28 @@
         }
         
         // Événement pour l'input quantité
-        quantityInput.addEventListener('input', () => {
-            currentQuantity = parseInt(quantityInput.value) || 1;
-            if (currentQuantity < 1) currentQuantity = 1;
-            quantityInput.value = currentQuantity;
+        if (quantityInput) {
+            quantityInput.addEventListener('input', () => {
+            currentQuantity = parseInt(quantityInput.value);
+            console.log(currentQuantity);
+            
+            if (currentQuantity < 1){
+                currentQuantity = 1;
+                quantityInput.value = currentQuantity;
+            }else if(!currentQuantity){
+                currentQuantity = 0;
+            }
+            
+
             updateOrderSummary();
         });
+        }
         
         // Soumission du formulaire
         const orderForm = document.getElementById('orderForm');
         
-        orderForm.addEventListener('submit', async (e) => {
+       if (orderForm) {
+         orderForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const deliveryAddress = document.getElementById('lieu').value.trim();
@@ -123,6 +134,16 @@
                     icon: 'error',
                     title: 'Champ manquant',
                     text: 'Veuillez indiquer le lieu de livraison',
+                    confirmButtonColor: '#dc3545'
+                });
+                return;
+            }
+            // Validation
+            if (quantity == 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Champ manquant',
+                    text: 'Veuillez indiquer la quantité',
                     confirmButtonColor: '#dc3545'
                 });
                 return;
@@ -236,6 +257,7 @@
                 });
             }
         });
+       }
         
         // Initialisation
         updateOrderSummary();

@@ -141,7 +141,9 @@
         <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande animation-slide" id="result-commande">
             
         </div>
-        <audio id="notificationSound" src="{{ url_for('static', filename='js/bip.wav') }}" preload="auto"></audio>
+        <div class="modal fade" id="detailsModal" tabindex="-1">
+          
+        </div>
     </div>
     <script>
     if ('serviceWorker' in navigator) {

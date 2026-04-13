@@ -1,12 +1,57 @@
 document.addEventListener("DOMContentLoaded", () => {
     commandeClient()
     setInterval(commandeClient,5000)
+     const audio = document.getElementById('notificationSound');
+        if (audio) {
+            audio.volume = 1;
+            audio.load();
+
+            const unlockAudio = () => {
+                audio.muted = true;
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = false;
+                    console.info('Notification audio déverrouillée');
+                }).catch(error => {
+                    audio.muted = false;
+                    console.warn('Impossible de déverrouiller le son de notification :', error);
+                });
+            };
+            document.addEventListener('click', unlockAudio, { once: true });
+            document.addEventListener('keydown', unlockAudio, { once: true });
+        }
+
 });
+
+ function playNotificationSound() {
+        const audio = document.getElementById('notificationSound');
+        if (!audio) {
+            console.warn('Balise audio notificationSound introuvable.');
+            return;
+        }
+
+        console.info('Lecture du son de notification');
+        audio.currentTime = 0;
+        audio.play().catch(error => {
+            console.warn('Notification audio bloquée ou indisponible :', error);
+        });
+    }
+let previousCommandCount = null;
+
 function commandeClient() {
     fetch("/commande-client")
     .then(res => res.json())
     .then(response => {
+        const currentCount = response.count;
+                if (previousCommandCount !== null && currentCount !== previousCommandCount) {
+                    playNotificationSound();
+                    
+                }
+
+                previousCommandCount = currentCount;
         afficheCommande(response.data)
+
     })
 }
 
@@ -23,17 +68,24 @@ function afficheCommande(commande) {
             year: 'numeric', month: 'long', day: 'numeric'
         });
 
+        
+
         let couleur = "";
         let icon = "";
         let classe = "";
-        if (cmd.status === "Nouvelle commande") {
+        let Nouvelvaleur="";
+        if (cmd.status === "Nouvelle_commande") {
             classe = 'dot-pending'
             couleur = "text-warning";
             icon = "bi-clock-history";
-        } else if (cmd.status === "En preparation") {
+            Nouvelvaleur="Nouvelle commande"
+            cmd.status=Nouvelvaleur
+        } else if (cmd.status === "Enpreparation") {
             classe = 'dot-info'
             couleur = "text-info";
             icon = "bi-arrow-repeat";
+            Nouvelvaleur="En Preparation"
+            cmd.status=Nouvelvaleur
         } else {
             classe = 'dot-success'
             couleur = "text-success";
@@ -79,83 +131,88 @@ function afficheCommande(commande) {
 }
 
 function initializeDetailsModal() {
-    const details = document.getElementById("detailsModal");
-    if (!details || details.querySelector('.modal-dialog')) {
-        return;
+    let details = document.getElementById("detailsModal");
+    if (!details) {
+        details = document.createElement("div");
+        details.id = "detailsModal";
+        details.className = "modal fade";
+        details.setAttribute("tabindex", "-1");
+        document.body.appendChild(details);
     }
-
-    details.innerHTML = `
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header py-2">
-                    <div>
-                        <h5 class="modal-title">Details</h5>
-                        <p class="small text-muted">Toutes les informations de la commande</p>
+    if (!details.querySelector('.modal-dialog')) {
+        details.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header py-2">
+                        <div>
+                            <h5 class="modal-title">Details</h5>
+                            <p class="small text-muted">Toutes les informations de la commande</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editForm">
-                        <input type="hidden" name="id" id="editId">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Date</label>
-                                <p class="m-0" id="detailDate"></p>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <input type="hidden" name="id" id="editId">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Date</label>
+                                    <p class="m-0" id="detailDate"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Code commande</label>
+                                    <p class="m-0" id="detailCode"></p>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Code commande</label>
-                                <p class="m-0" id="detailCode"></p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Client</label>
+                                    <p class="text-uppercase m-0" id="detailClient"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Lieu</label>
+                                    <p class="text-uppercase m-0" id="detailLieu"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Client</label>
-                                <p class="text-uppercase m-0" id="detailClient"></p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Code promo</label>
+                                    <p class="text-uppercase m-0" id="detailPromo"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Contact</label>
+                                    <p class="text-uppercase m-0" id="detailContact"></p>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Lieu</label>
-                                <p class="text-uppercase m-0" id="detailLieu"></p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Nombre de poulet</label>
+                                    <p class="text-uppercase m-0" id="detailQuantite"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Prix total</label>
+                                    <p class="text-uppercase m-0" id="detailTotal"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Code promo</label>
-                                <p class="text-uppercase m-0" id="detailPromo"></p>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Contact</label>
-                                <p class="text-uppercase m-0" id="detailContact"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Nombre de poulet</label>
-                                <p class="text-uppercase m-0" id="detailQuantite"></p>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" style="color: var(--grey);">Prix total</label>
-                                <p class="text-uppercase m-0" id="detailTotal"></p>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer" id="detailsModalFooter">
-                    <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
-                        <input type="hidden" name="id_commande" id="detailOrderIdTraiter">
-                        <input type="hidden" name="date_commande" id="detaildatedLivrer">
-                        <input type="hidden" name="Traiter" value="En preparation">
-                        <button type="submit" class="btn btn-custom-secondary">Traiter</button>
-                    </form>
-                    <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
-                        <input type="hidden" name="id_commande" id="detailOrderIdLivrer">
-                        <input type="hidden" name="date_commande" id="detaildatedLivrer">
-                        <input type="hidden" name="Livrer" value="Livré">
-                        <button type="submit" class="btn btn-custom-primary">Livrer</button>
-                    </form>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="detailsModalFooter">
+                        <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
+                            <input type="hidden" name="id_commande" id="detailOrderIdTraiter">
+                            <input type="hidden" name="date_commande" id="detaildatedLivrer">
+                            <input type="hidden" name="Traiter" value="Enpreparation">
+                            <button type="submit" class="btn btn-custom-secondary">Traiter</button>
+                        </form>
+                        <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
+                            <input type="hidden" name="id_commande" id="detailOrderIdLivrer">
+                            <input type="hidden" name="date_commande" id="detaildatedLivrer">
+                            <input type="hidden" name="Livrer" value="livree">
+                            <button type="submit" class="btn btn-custom-primary">Livrer</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 }
 
 function fillDetailsModal(cmd) {

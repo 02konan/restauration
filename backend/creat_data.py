@@ -32,5 +32,4 @@ def update_commande(id_commande, status):
             return {"success": True}
     except Exception as e:
         error_message = str(e)
-        print(f"An error occurred: {error_message}")
         return {"success": False, "error": error_message}

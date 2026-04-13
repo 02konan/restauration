@@ -53,11 +53,12 @@ def Page_commande():
     return jsonify({
             "succes":True,
             "data":table,
+            "count":len(table)
         })
  
 @app.route("/Commande")
 def commande():
-    return render_template("commande.html")
+    return render_template("all-commandes.html")
 
 @app.route('/inscriptionPartenaire')
 def partenaire():
@@ -77,7 +78,7 @@ def api_commandes():
     total = data.get("total")
     promo = data.get("promo_code") or None
     nom =f"Cli-{random.randint(100, 999)}"  # Générer un nom de client basé sur les derniers chiffres du code de commande
-    statut = "Nouvelle commande"
+    statut = "Nouvelle_commande"
     prix_unitaire = 5000
     
 
@@ -105,9 +106,20 @@ def api_commandes():
 
 @app.route("/commission")
 def commission():
-    commissions = read_commission(maquis_id= 15)
+    commissions = read_commission(maquis_id= 77)
     unique_commands = len(set(c['id_commande'] for c in commissions))
     total_com = sum(c['commission'] for c in commissions)
+    data =read_commission()
+    commissions = []
+    for row in data:
+         commissions.append({
+                'id_commande': row[0],  # Nouveau champ
+                'nom_produit': row[1],  # Était row[0] avant
+                'commission': row[2],   # Était row[1]
+                'date_commande': row[3], # Était row[2]
+                'quantite': row[4]      # Était row[3]
+            })
+        
     return render_template("commission.html", commissions=commissions, unique_commands=unique_commands, total_com=total_com)
 
 @app.route("/api/commissions")
