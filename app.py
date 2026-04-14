@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for,session,flash
-from flask_cors import CORS
+# from flask_cors import CORS
 from functools import wraps
 from backend.creat_data import create_commande,update_commande
 from backend.read_data import liste_commandes,read_commission,get_maquis_code
