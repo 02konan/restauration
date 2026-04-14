@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for,session,flash
+from flask_cors import CORS
+from functools import wraps
 from backend.creat_data import create_commande,update_commande
 from backend.read_data import liste_commandes,read_commission,get_maquis_code
+# from backend.Auth import Authentification
 import random
 app = Flask(__name__)
 app_key="Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix"
@@ -12,9 +15,59 @@ app_key="Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix"
 def home():
     return render_template("form-commande.html")
 
-@app.route("/login")
-def login():
-    return render_template("login.html")
+# CORS(app)
+# def init_session():
+#     if 'connecter' not in session:
+#         session['connecter'] = False
+
+# @app.before_request
+# def before_request():
+#     init_session()
+
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if 'connecter' not in session or not session['connecter']:
+#             return redirect(url_for('login'))
+#         return f(*args, **kwargs)
+#     return decorated_function
+
+# def role_required(role):
+#     def decorator(f):
+#         from functools import wraps
+#         @wraps(f) 
+#         def decorated_function(*args, **kwargs):
+#             if 'role' not in session or session['role'].lower() != role.lower():
+#                 flash("Accès refusé : vous n'avez pas les droits nécessaires.", "danger")
+#                 return redirect(url_for('index'))
+#             return f(*args, **kwargs)
+#         return decorated_function
+#     return decorator
+
+
+# @app.route("/login")
+# def login():
+#     if request.method == 'POST':
+#         email = request.form['email']
+#         password = request.form['password']
+
+#         utilisateur = Authentification(email, password)
+#         if utilisateur:
+#             session.clear()
+#             session.permanent = True
+#             session['connecter'] = True
+#             session['username'] = email
+           
+
+#             if utilisateur['nom_roles'].lower() == 'superadmin':
+#                 return redirect(url_for('index'))
+#             elif utilisateur['nom_roles'].lower() == 'admin':
+#                 return redirect(url_for('index'))
+#             else: 
+#                 return redirect(url_for('index'))
+#         else:
+#             flash("Identifiants incorrects. Veuillez réessayer.", "danger")
+#     return render_template('login.html')
 
 # @app.route("/form-commande")
 # def form_commande():
@@ -47,7 +100,7 @@ def Page_commande():
             "quantite":i[8],
             "Total":i[9],
             "date_commande":i[10],
-            "lieu":i[11],
+            "lieu":i[11]
             })
             
     return jsonify({

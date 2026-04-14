@@ -48,8 +48,8 @@ function commandeClient() {
                     playNotificationSound();
                     
                 }
-
                 previousCommandCount = currentCount;
+                taille=document.getElementById("totalResults").textContent=currentCount+' '+"Commandes"
         afficheCommande(response.data)
 
     })
@@ -96,6 +96,7 @@ function afficheCommande(commande) {
         item.className = "order-item shadow-sm";
         item.setAttribute("data-bs-toggle", "modal");
         item.setAttribute("data-bs-target", "#detailsModal");
+
         item.innerHTML = `
             <div class="content w-100 d-flex gap-3">
                 <div class="image">

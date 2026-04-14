@@ -316,7 +316,12 @@
                             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
                             const data = await response.json();
                             const address = data.display_name || `Latitude: ${lat}, Longitude: ${lng}`;
-                            document.getElementById('lieu').value = address;
+                            const lieu="";
+                            if (address===""){
+                                lieu=document.getElementById('lieu').value
+                            }else{
+                                lieu= address;
+                            }
                             document.getElementById('latitude').value = lat;
                             document.getElementById('longitude').value = lng;
                         } catch (error) {
