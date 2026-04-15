@@ -319,7 +319,7 @@
                             const data = await response.json();
                             const address = data.display_name || lieu;
                             
-                            document.getElementById('lieu').value=adress
+                            document.getElementById('lieu').value = address;
                             document.getElementById('latitude').value = lat;
                             document.getElementById('longitude').value = lng;
                         } catch (error) {
