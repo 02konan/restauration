@@ -312,16 +312,14 @@
                     navigator.geolocation.getCurrentPosition(async (position) => {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
+                
+                         let lieu = document.getElementById('lieu').value
                         try {
                             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
                             const data = await response.json();
-                            const address = data.display_name || `Latitude: ${lat}, Longitude: ${lng}`;
-                            const lieu="";
-                            if (address===""){
-                                lieu=document.getElementById('lieu').value
-                            }else{
-                                lieu= address;
-                            }
+                            const address = data.display_name || lieu;
+                            
+                            document.getElementById('lieu').value=adress
                             document.getElementById('latitude').value = lat;
                             document.getElementById('longitude').value = lng;
                         } catch (error) {
