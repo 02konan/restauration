@@ -11,6 +11,7 @@ from backend.Auth import Authentification
 import random
 
 app = Flask(__name__)
+CORS(app)
 app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY",
     "Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix",
