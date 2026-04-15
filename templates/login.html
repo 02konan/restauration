@@ -193,11 +193,16 @@
             
             <div class="login-card">
                 <!-- Message d'alerte (caché par défaut) -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                   {% for category, message in messages %}
                 <div id="loginAlert" class="alert-custom alert-error" style="display: none;">
                     <i class="bi bi-exclamation-circle-fill"></i>
-                    <span id="alertMessage">Email ou mot de passe incorrect</span>
+                    <span id="alertMessage">{{ message }}</span>
                 </div>
-                <form id="formLogin" onsubmit="handleLogin(event)" method="post">
+                  {% endfor %}
+                {% endwith %}
+
+                <form id="formLogin" onsubmit="handleLogin(event)" action="{{ url_for('login') }}" method="post">
                     <!-- Si c'est un client -->
                     <!-- <div class="mb-3">
                         <label class="form-label">Numéro de téléphone</label>
@@ -233,7 +238,6 @@
                     </div> -->
                     
                     <!-- Fin Si c'est un admin -->
-
                     <button type="submit" id="loginButton" class="btn btn-orange w-100 mb-3 rounded-pill">
                         <i class="bi bi-box-arrow-in-right"></i>
                         <span id="buttonText">Se connecter</span>

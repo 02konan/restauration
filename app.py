@@ -1,79 +1,82 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for,session,flash
-# from flask_cors import CORS
-from functools import wraps
-from backend.creat_data import create_commande,update_commande
-from backend.read_data import liste_commandes,read_commission,get_maquis_code
-# from backend.Auth import Authentification
+import os
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
+from flask_cors import CORS
+from flask_login import current_user,LoginManager,login_user
+from backend.creat_data import create_commande, update_commande
+from backend.read_data import liste_commandes, read_commission, get_maquis_code,get_user_id
+from backend.MessageApi import Message
+from backend.Models import User
+from datetime import timedelta,datetime
+from backend.Auth import Authentification
 import random
+
 app = Flask(__name__)
-app_key="Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix"
+app.config["SECRET_KEY"] = os.environ.get(
+    "SECRET_KEY",
+    "Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix",
+)
 
+app.permanent_session_lifetime= timedelta(minutes=5)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
 
+@login_manager.user_loader
+def load_user(id_user):
+    user = get_user_id(int(id_user))
+    return user
+
+@app.before_request
+def restriction():
+    tab_route = ["home","formcommande","login","api_commandes","static"] 
+    if not current_user.is_authenticated and request.endpoint not in tab_route:
+        return redirect(url_for("login"))
+
+@app.route("/form-commande")
+def formcommande():
+    return render_template("form-commande.html")
 
 @app.route("/")
 def home():
-    return render_template("form-commande.html")
+    return render_template("index.html")
 
-# CORS(app)
-# def init_session():
-#     if 'connecter' not in session:
-#         session['connecter'] = False
+@app.route("/login",methods=["POST","GET"])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
 
-# @app.before_request
-# def before_request():
-#     init_session()
-
-# def login_required(f):
-#     @wraps(f)
-#     def decorated_function(*args, **kwargs):
-#         if 'connecter' not in session or not session['connecter']:
-#             return redirect(url_for('login'))
-#         return f(*args, **kwargs)
-#     return decorated_function
-
-# def role_required(role):
-#     def decorator(f):
-#         from functools import wraps
-#         @wraps(f) 
-#         def decorated_function(*args, **kwargs):
-#             if 'role' not in session or session['role'].lower() != role.lower():
-#                 flash("Accès refusé : vous n'avez pas les droits nécessaires.", "danger")
-#                 return redirect(url_for('index'))
-#             return f(*args, **kwargs)
-#         return decorated_function
-#     return decorator
-
-
-# @app.route("/login")
-# def login():
-#     if request.method == 'POST':
-#         email = request.form['email']
-#         password = request.form['password']
-
-#         utilisateur = Authentification(email, password)
-#         if utilisateur:
-#             session.clear()
-#             session.permanent = True
-#             session['connecter'] = True
-#             session['username'] = email
-           
-
-#             if utilisateur['nom_roles'].lower() == 'superadmin':
-#                 return redirect(url_for('index'))
-#             elif utilisateur['nom_roles'].lower() == 'admin':
-#                 return redirect(url_for('index'))
-#             else: 
-#                 return redirect(url_for('index'))
-#         else:
-#             flash("Identifiants incorrects. Veuillez réessayer.", "danger")
-#     return render_template('login.html')
-
-# @app.route("/form-commande")
-# def form_commande():
-#     return render_template("form-commande.html")
+        utilisateur = Authentification(email, password)
+        if utilisateur:
+            load_user(utilisateur['id'])
+            user = User(
+                utilisateur['id'],
+                utilisateur['id_role'],
+                utilisateur['nom'],
+                utilisateur['email'],
+                utilisateur['nom_roles']
+            )
+            login_user(user)
+            session.permanent = True
+            session['connecter'] = True
+            session['identifiant'] = int(utilisateur['id'])
+            session['role'] = utilisateur['nom_roles']
+            session['username'] = utilisateur['nom']
+            if session['role'].lower() == 'admin':
+               return redirect(url_for("Page_Dashboard"))
+            else:
+               return redirect(url_for("Page_client"))
+        else:
+            flash("Email ou mot de passe incorrect, Veuillez réessayer.", "danger")
+    return render_template('login.html')
+         
+@app.route("/Client")
+def Page_client():
+    return render_template("commande.html")
 
 @app.route("/Dashboard",methods=["POST","GET"])
+
 def Page_Dashboard():
     if request.method == "POST":
         status = request.form.get("Traiter") or request.form.get("Livrer")
@@ -123,7 +126,7 @@ def api_commandes():
     if not data:
         return jsonify({"error": "Requête invalide"}), 400
 
-    commune = data.get("delivery_address")
+    commune = data.get("delivery_address").lower()
     contact = data.get("contact_phone") or data.get("contactPhone")
     qty = data.get("quantity")
     Numcode = data.get("CodeCommande")
@@ -133,12 +136,15 @@ def api_commandes():
     nom =f"Cli-{random.randint(100, 999)}"  # Générer un nom de client basé sur les derniers chiffres du code de commande
     statut = "Nouvelle_commande"
     prix_unitaire = 5000
-    
+    contactMessage=f"225{contact.strip().replace(" ","")}"
+    print(contactMessage)
+    Message(contactMessage,datetime.now().strftime("%d-%m-%Y %H:%M "),Numcode,total,commune)
 
     if not commune or not contact or not qty:
         return jsonify({"error": "Les champs obligatoires sont manquants"}), 400
 
     result = create_commande(nom, contact, Numcode, promo, statut, commune, prix_unitaire, qty, total)
+    
     if not result.get("success"):
         return jsonify({"error": result.get("error", "Erreur interne")}), 500
 
@@ -198,6 +204,11 @@ def Page_profile():
 @app.route("/carte")
 def Page_carte():
     return render_template("cart.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":

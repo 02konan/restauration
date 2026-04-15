@@ -1,4 +1,24 @@
 from backend.data_base import connexion
+from backend.Models import User
+
+
+def get_user_id(user_id):
+    try:
+        with connexion() as conn:
+            with conn.cursor() as cursor:
+                sql = """
+                SELECT utilisateurs.id, id_role, nom, email, nom_roles
+                FROM utilisateurs 
+                JOIN role ON utilisateurs.id_role = role.id
+                WHERE utilisateurs.id = %s;
+                """
+                cursor.execute(sql, (user_id,))
+                row = cursor.fetchone()
+                if row:
+                    return User(row[0], row[1], row[2], row[3], row[4])
+                return None
+    except Exception as e:
+        return f"erreur get_user_id: {e}"
 
 def liste_commandes():
     try:
