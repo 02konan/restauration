@@ -30,8 +30,8 @@ def load_user(id_user):
 
 @app.before_request
 def restriction():
-    tab_route = ["home","formcommande","login","api_commandes","static"] 
-    if not current_user.is_authenticated and request.endpoint not in tab_route:
+    tab_route = ["home","formcommande","login","login_maquis","api_commandes","static", "commission"] 
+    if not (current_user.is_authenticated or session.get('connecter')) and request.endpoint not in tab_route:
         return redirect(url_for("login"))
 
 @app.route("/form-commande")
@@ -72,6 +72,25 @@ def login():
             flash("Email ou mot de passe incorrect, Veuillez réessayer.", "danger")
     return render_template('login.html')
          
+@app.route("/login_maquis", methods=["POST", "GET"])
+def login_maquis():
+    if request.method == 'POST':
+        code_maquis = request.form['code_maquis']
+        # Ici, nous devons vérifier le code maquis
+        # Supposons qu'il y a une fonction pour vérifier le code
+        from backend.read_data import get_maquis_by_code
+        maquis = get_maquis_by_code(code_maquis)
+        if maquis:
+            # Créer un utilisateur maquis ou gérer la session
+            session['connecter'] = True
+            session['maquis_id'] = maquis['id']
+            session['role'] = 'maquis'
+            session['username'] = maquis['nom']  # Supposons qu'il y a un nom
+            return redirect(url_for("commission"))  # Rediriger vers la page commission
+        else:
+            flash("Code maquis incorrect, Veuillez réessayer.", "danger")
+    return render_template('login_maquis.html')
+
 @app.route("/Client")
 def Page_client():
     return render_template("commande.html")
@@ -166,10 +185,10 @@ def api_commandes():
 
 @app.route("/commission")
 def commission():
-    commissions = read_commission(maquis_id= 77)
-    unique_commands = len(set(c['id_commande'] for c in commissions))
-    total_com = sum(c['commission'] for c in commissions)
-    data =read_commission()
+    maquis_id = session.get('maquis_id', 77)  # Utiliser 77 par défaut si pas de session
+    data = read_commission(maquis_id= maquis_id)
+    unique_commands = len(set(c['id_commande'] for c in data))
+    total_com = sum(c['commission'] for c in data)
     commissions = []
     for row in data:
          commissions.append({

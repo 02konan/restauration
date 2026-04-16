@@ -1,4 +1,4 @@
- {% extends 'base.html' %}
+{% extends 'base.html' %}
    {% block content %}
     <style>
         :root {
@@ -202,52 +202,21 @@
                   {% endfor %}
                 {% endwith %}
 
-                <form id="formLogin" onsubmit="handleLogin(event)" action="{{ url_for('login') }}" method="post">
-                    <!-- Si c'est un client -->
-                    <!-- <div class="mb-3">
-                        <label class="form-label">Numéro de téléphone</label>
-                        <input type="text" class="form-control" name="telephone" placeholder="Entrez votre numéro...">
-                            <div id="telephoneHelp" class="form-text">Entrez un numéro déjà utiliser pour commander</div>
-                    </div> -->
-                    <!-- Fin Si c'est un client -->
-
-                    <!-- Si c'est un client -->
-                    <!-- <div class="mb-3" style="display: none;" id="inputcmd">
-                        <label class="form-label">Code </label>
-                        <input type="text" class="form-control" name="code" placeholder="Entrez votre code...">
-                            <div id="telephoneHelp" class="form-text">Entrez votre Code utiliser pour les Commandes</div>
-                    </div> -->
-                    <!-- Fin Si c'est un client -->
+                <form id="formLogin" onsubmit="handleLogin(event)" action="{{ url_for('login_maquis') }}" method="post">
                     
-                    <!-- Si c'est un admin -->
-                    <div class="mb-3" id="inputemail">
-                        <label class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" placeholder="Entrez votre email...">
+                    <div class="mb-3">
+                        <label class="form-label">Code Maquis</label>
+                        <input type="text" class="form-control" name="code_maquis" placeholder="Entrez votre code maquis...">
                     </div>
-
-                    <div class="mb-3" id="inputmpd">
-                        <label class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" name="password" placeholder="Entrez votre mot de passe">
-                    </div>
-                    <!-- <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <input type="checkbox" id="remember">
-                            <label for="remember">Se souvenir</label>
-                        </div>
-                        <a href="#" class="link-red ms-auto">Mot de passe oublié ?</a>
-                    </div> -->
                     
-                    <!-- Fin Si c'est un admin -->
                     <button type="submit" id="loginButton" class="btn btn-orange w-100 mb-3 rounded-pill">
                         <i class="bi bi-box-arrow-in-right"></i>
                         <span id="buttonText">Se connecter</span>
                     </button>
-                    <!-- Si c'est un client -->
-                        <p class="text-center">
-                            Je ne suis pas un client
-                            <a href="{{ url_for('login_maquis') }}" class="link-red" id="btnclick">Se connecter autrement?</a>
-                        </p>
-                    <!-- Fin Si c'est un client -->
+                    
+                    <p class="text-center">
+                        <a href="{{ url_for('login') }}" class="link-red">Se connecter comme admin</a>
+                    </p>
                 </form>
             </div>
         </div>
@@ -255,63 +224,7 @@
 </div>
 <script>
 
-    // function handleLogin(event) {
-    //     event.preventDefault();
-        
-    //     const form = document.getElementById('formLogin');
-    //     const formData = new FormData(form);
-    //     const telephone = formData.get('telephone');
-        
-    //     // Validation côté client
-    //     if (!telephone || telephone.trim() === '') {
-    //         showAlert('error', 'Veuillez saisir votre numéro de téléphone');
-    //         return;
-    //     }
-        
-    //     const button = document.getElementById('loginButton');
-        
-    //     // Désactiver le bouton et montrer le loading
-    //     button.disabled = true;
-    //     button.innerHTML = '<span class="spinner"></span><span>Connexion...</span>';
-        
-    //     fetch('api/login.php', {
-    //         method: 'POST',
-    //         body: formData
-    //     })
-    //     .then(response => {
-    //         // Vérifier si la réponse est OK
-    //         if (!response.ok) {
-    //             throw new Error('Erreur réseau');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(data => {
-    //         console.log(data);
-    //         if (data.success) {
-    //             // Sauvegarder le téléphone dans le localStorage
-    //             localStorage.setItem('telephone', telephone);
-    //             // Afficher le message de succès
-    //             showAlert('success', data.message);
-    //             // Redirection après 1 seconde
-    //             setTimeout(() => {
-    //                 window.location.href = data.redirect;
-    //             }, 1000);
-    //         } else {
-    //             // Réactiver le bouton
-    //             button.disabled = false;
-    //             button.innerHTML = '<i class="bi bi-box-arrow-in-right"></i><span>Se connecter</span>';
-    //             showAlert('error', data.message);
-    //         }
-    //     })
-    //     .catch(error => {
-    //         console.error('Erreur lors de la requête:', error);
-    //         button.disabled = false;
-    //         button.innerHTML = '<i class="bi bi-box-arrow-in-right"></i><span>Se connecter</span>';
-    //         showAlert('error', 'Erreur de connexion au serveur. Veuillez réessayer.');
-    //     });
-    // }
-
-    // // Afficher les alertes
+    // Afficher les alertes
     function showAlert(type, message) {
         const alertBox = document.getElementById('loginAlert');
         const alertMessage = document.getElementById('alertMessage');

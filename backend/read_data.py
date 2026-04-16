@@ -62,6 +62,18 @@ def get_maquis_code(maquis_id):
     except Exception as e:
         return None
 
+def get_maquis_by_code(code):
+    try:
+        with connexion() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT id, nom, code FROM maquis WHERE code = %s", (code,))
+                row = cursor.fetchone()
+                if row:
+                    return {'id': row[0], 'nom': row[1], 'code': row[2]}
+                return None
+    except Exception as e:
+        return None
+
 def read_commission(maquis_id):
     try:
         with connexion() as conn:

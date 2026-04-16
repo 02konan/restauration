@@ -1,0 +1,344 @@
+ {% extends 'base.html' %}
+   {% block content %}
+
+  <!-- LEFT SIDE: INTERFACE 1 (Mes commandes) + INTERFACE 2 (Passer commande) + INTERFACE 3 (Confirmation) 
+    but we combine to replicate full flow but visually show all screens as per design -->
+    <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
+        <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary shadow position-fixed">
+            <div class="container-fluid d-flex justify-content-center "> -->
+                <!-- Logo/Brand à gauche -->
+                <!-- <a class="navbar-brand" href="#">
+                    <img class="me-5" src="./logo.png" height="35" alt="">
+                </a> -->
+                
+                <!-- Menu collapse -->
+                <!-- <div class="w-100" id="">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="./all-commandes.html"><i class="bi bi-bag-fill"></i> <span class="ms-1">Commandes</span></a>
+                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./profile.html"><i class="bi bi-person bi-simple"></i> <i class="bi bi-person-fill bi-active"></i> <span class="ms-1">Profil</span></a>
+                        </li>
+                    </ul>
+                </div> -->
+                <!-- <div class="btn-group">
+                    <button class="btn btn-sm">S'inscrire</button>
+                    <button class="btn btn-sm btn-dark rounded-pill">Se connecter</button>
+                </div> -->
+            <!-- </div>
+        </nav> -->
+
+        <div class="container-fluid d-flex">
+            <a href="#" class="ms-auto">Se connecter</a>
+        </div>
+
+        <div class="container-fluid p-0 banner">
+            <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
+            <!-- <a href="./form-commande.php" class="btn btn-custom-primary rounded-pill">
+                Commandez <i class="bi bi-arrow-right-circle-fill ms-3"></i>
+            </a> -->
+            <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center my-3 subtitle">
+            <h4 class="fw-bold">Livraisons</h4>
+            <span class="text-muted" id="totalResults">
+                12 commandes
+            </span>
+        </div>
+
+        <form action="" class="d-flex align-items-center px-3 py-2 rounded-pill animation-slide" id="searchForm">
+            <i class="bi bi-search me-2"></i>
+            <input type="text" class="" placeholder="Recherche..." id="searchInput" name="searchInput">
+        </form>
+
+        <div class="d-flex gap-2 mt-2 filter-pills animation-slide" id="filterPills">
+            <button type="button" class="btn btn-sm rounded-pill filter-pill active" data-filter="">Tous</button>
+            <button type="button" class="btn btn-sm rounded-pill filter-pill" data-filter="en_preparation">Mes Livraisons</button>
+        </div>
+
+        <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande" id="result-livreur-commande">
+            <div class="order-item shadow-sm" data-bs-toggle="modal" data-bs-target="#detailsLivreurModal">
+                <div class="content w-100 d-flex gap-3">
+                    <div class="image">
+                        <img src="static/back/back0.png" alt="Poulet braisé">
+                    </div>
+                    <div class="text d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="mb-0">Poulet braisé</h3>
+                            <span class="dot dot-pending" title="En attente">
+                                <i class="bi bi-clock-history"></i>
+                            </span>
+                        </div>
+                        <div class="text-muted desc mt-2">
+                            <span class="badge rounded-pill">CMD-24E463-5345435</span>
+                        </div>
+                        <div class="price-tag mt-auto">FCFA 10,000</div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                        <p class="small text-muted date mb-1">25 Mar 2026</p>
+                        <p class="quantity ms-auto mb-0">2</p>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top">
+                    <small class="text-warning">
+                            Nouvelle commande
+                    </small>
+                </div>
+            </div>
+
+            <div class="order-item shadow-sm" data-bs-toggle="modal" data-bs-target="#detailsLivreurModal">
+                <div class="content w-100 d-flex gap-3">
+                    <div class="image">
+                        <img src="static/back/back0.png" alt="Poulet braisé">
+                    </div>
+                    <div class="text d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="mb-0">Poulet braisé</h3>
+                            <span class="dot dot-info" title="En préparation">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </span>
+                        </div>
+                        <div class="text-muted desc mt-2">
+                            <span class="badge rounded-pill">CMD-24E463-5345435</span>
+                        </div>
+                        <div class="price-tag mt-auto">FCFA 10,000</div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                        <p class="small text-muted date mb-1">25 Mar 2026</p>
+                        <p class="quantity ms-auto mb-0">2</p>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top">
+                    <small class="text-info">
+                        En preparation
+                    </small>
+                </div>
+            </div>
+
+            <div class="order-item shadow-sm">
+                <div class="content w-100 d-flex gap-3" data-bs-toggle="modal" data-bs-target="#detailsLivreurModal">
+                    <div class="image">
+                        <img src="static/back/back0.png" alt="Poulet braisé">
+                    </div>
+                    <div class="text d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="mb-0">Poulet braisé</h3>
+                            <span class="dot dot-success" title="Livrée">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </span>
+                        </div>
+                        <div class="text-muted desc mt-2">
+                            <span class="badge rounded-pill">CMD-24E463-5345435</span>
+                        </div>
+                        <div class="price-tag mt-auto">FCFA 10,000</div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
+                        <p class="small text-muted date mb-1">25 Mar 2026</p>
+                        <p class="quantity ms-auto mb-0">2</p>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-top">
+                    <small class="text-success">
+                        Livrée le 27 Mars 2026
+                    </small>
+                </div>
+            </div>
+        </div>
+        <audio id="notificationSound" src="{{ url_for('static', filename='js/bip.wav') }}" preload="auto"></audio>
+        <div class="modal fade" id="detailsLivreurModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header py-2">
+                        <div class="">
+                            <h5 class="modal-title">Details</h5>
+                            <p class="small text-muted">Toutes les informations de la commande</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <input type="hidden" name="id" id="editId">
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Commune de Livraison</label>
+                                    <select name="" id="" class="form-select">
+                                        <option value="" selected disabled>Choisir...</option>
+                                        <option value="abobo">Abobo</option>
+                                        <option value="adjame">Adjamé</option>
+                                        <option value="anyama">Anyama</option>
+                                        <option value="attécoubé">Attécoubé</option>
+                                        <option value="bingerville">Bingerville</option>
+                                        <option value="cocody">Cocody</option>
+                                        <option value="grand-bassam">Grand-Bassam</option>
+                                        <option value="koumassi">Koumassi</option>
+                                        <option value="marcory">Marcory</option>
+                                        <option value="plateau">Plateau</option>
+                                        <option value="port-bouet">Port-Bouët</option>
+                                        <option value="songon">Songon</option>
+                                        <option value="treichville">Treichville</option>
+                                        <option value="yopougon">Yopougon</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Date</label>
+                                    <p class=" m-0">12 Mars 2026 à 10:23:55</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Code commande</label>
+                                    <p class="m-0">CMD-61467826387-846</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Client</label>
+                                    <p class="text-uppercase m-0">user0789147968</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Lieu</label>
+                                    <p class="text-uppercase m-0">Abobo</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Code promo</label>
+                                    <p class="text-uppercase m-0">Y-CO-001</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Contact</label>
+                                    <p class="text-uppercase m-0">0789465738</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Nombre de poulet</label>
+                                    <p class="text-uppercase m-0">2</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="color: var(--grey);">Prix total</label>
+                                    <p class="text-uppercase m-0">10 000 F</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button> -->
+                        <button type="button" class="btn btn-custom-primary" data-bs-dismiss="modal">Livrer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/static/js/sw.js')
+        .then(() => console.log("Service Worker enregistré"))
+        .catch(err => console.log("Erreur SW", err));
+    }
+    </script>
+    <script>
+        // Variables globales
+        let currentPage = 1;
+        let currentFilters = new FormData();
+        let resultsPerPage = 10;
+        let searchTimeout;
+        let activeFilter = '';
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Écouteurs filtre statut (pills)
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    activeFilter = this.dataset.filter;
+                    currentPage = 1;
+                });
+            });
+
+            // Fermer le menu contextuel en cliquant ailleurs
+            document.addEventListener('click', closeContextMenu);
+            document.addEventListener('scroll', closeContextMenu, true);
+
+            // Ajouter les écouteurs context menu aux order-items existants
+            document.querySelectorAll('.order-item').forEach((row, index) => {
+                // Simuler un ID de commande pour la démo (dans un vrai app, ça viendrait des données)
+                const commandeId = index + 1;
+                const commandeStatut = index === 0 ? 'en_attente' : index === 1 ? 'en_preparation' : 'livree';
+                
+                // Context menu : clic droit desktop + maintien mobile
+                let pressTimer;
+                row.addEventListener('contextmenu', (e) => showContextMenu(e, commandeId, commandeStatut));
+                row.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => {
+                        const touch = e.touches[0];
+                        showContextMenu({ preventDefault: () => {}, clientX: touch.clientX, clientY: touch.clientY }, commandeId, commandeStatut);
+                    }, 600);
+                }, { passive: true });
+                row.addEventListener('touchend', () => clearTimeout(pressTimer));
+                row.addEventListener('touchmove', () => clearTimeout(pressTimer));
+            });
+        });
+
+        // ── Context menu ──────────────────────────────────────
+        let contextMenuTarget = null;
+
+        function showContextMenu(e, commandeId, commandeStatut) {
+            e.preventDefault();
+            closeContextMenu();
+
+            contextMenuTarget = { id: commandeId, statut: commandeStatut };
+
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.id = 'contextMenu';
+
+            menu.innerHTML = `
+                <button class="context-menu-item" onclick="handleContextAction('details', ${commandeId})">
+                    <i class="bi bi-eye"></i> Détails
+                </button>
+                <button class="context-menu-item" onclick="handleContextAction('traiter', ${commandeId})">
+                    <i class="bi bi-arrow-repeat"></i> Traiter
+                </button>
+                <button class="context-menu-item danger" onclick="handleContextAction('livree', ${commandeId})">
+                    <i class="bi bi-check-circle-fill"></i> Livrée
+                </button>
+            `;
+
+            // Positionner le menu
+            const x = e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth / 2;
+            const y = e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight / 2;
+
+            menu.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+            menu.style.top  = Math.min(y, window.innerHeight - 160) + 'px';
+
+            document.body.appendChild(menu);
+        }
+
+        function closeContextMenu() {
+            const existing = document.getElementById('contextMenu');
+            if (existing) existing.remove();
+            contextMenuTarget = null;
+        }
+
+        // Formater la date côté JS (équivalent PHP formatDate)
+        // function formatDateJS(dateStr) {
+        //     if (!dateStr) return 'Date inconnue';
+        //     const date = new Date(dateStr);
+        //     const now = new Date();
+        //     const diff = (now - date) / 1000;
+
+        //     if (diff < 86400) return "Aujourd'hui";
+        //     if (diff < 172800) return 'Hier';
+
+        //     return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+        // }
+
+    </script>
+{% endblock %}
+    <!-- <footer>Du Bon Poulet Braisé — Commandez et gagnez des commissions avec votre code promo</footer> -->
+
