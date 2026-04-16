@@ -157,7 +157,6 @@ def api_commandes():
     statut = "Nouvelle_commande"
     prix_unitaire = 5000
     contactMessage=f"225{contact.strip().replace(" ","")}"
-    print(contactMessage)
     Message(contactMessage,datetime.now().strftime("%d-%m-%Y %H:%M "),Numcode,total,commune)
 
     if not commune or not contact or not qty:
