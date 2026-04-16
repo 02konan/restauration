@@ -522,7 +522,10 @@ i.bi {
     animation: slide 0.3s ease;
 }
 .commission-items{
-    background: var(--white) !important;
+    background: #C53A2C !important;
+    color: white !important;
+    border-radius: 10px !important;
+
 }
 .icon{
     object-fit: cover;
@@ -801,12 +804,13 @@ i.bi {
     
     .commission-items{
         display: flex;
-        background: var(--white) !important;
+        background: #C53A2C !important;
         border-radius: 10px !important;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 20px;
+        color: white !important;
     }
     .commission-items h3, .commission-items p{
         margin: 0 !important;

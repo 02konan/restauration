@@ -5,7 +5,7 @@
 <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
     
     <div class="container-fluid d-flex">
-        <p class="text-muted ms-auto user">user0789567898</p>
+        <p class="text-muted ms-auto user"> <strong>Partenaire: {{ session['maquis_nom'] }}</strong></p>
     </div>
     <div class="container-fluid p-0 banner">
         <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
@@ -18,11 +18,11 @@
     <div class="container-fluid p-0 d-flex gap-2">
         <div class="col commission-items">
             <h3>{{ unique_commands }}</h3>
-            <p class="small text-muted">Commandes</p>
+            <p class="small text-muted text-white">Commandes</p>
         </div>
         <div class="col commission-items">
             <h3>{{ total_com }} F</h3>
-            <p class="small text-muted">Commission du</p>
+            <p class="small text-muted text-white">Commission du</p>
         </div>
     </div>
 

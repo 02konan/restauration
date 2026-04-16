@@ -6,6 +6,7 @@ from backend.creat_data import create_commande, update_commande
 from backend.read_data import liste_commandes, read_commission, get_maquis_code,get_user_id
 from backend.MessageApi import Message
 from backend.Models import User
+from backend.read_data import get_maquis_by_code
 from datetime import timedelta,datetime
 from backend.Auth import Authentification
 import random
@@ -30,7 +31,7 @@ def load_user(id_user):
 
 @app.before_request
 def restriction():
-    tab_route = ["home","formcommande","login","login_maquis","api_commandes","static", "commission"] 
+    tab_route = ["home","formcommande","login","login_maquis","api_commandes","livreur","static"] 
     if not (current_user.is_authenticated or session.get('connecter')) and request.endpoint not in tab_route:
         return redirect(url_for("login"))
 
@@ -76,16 +77,13 @@ def login():
 def login_maquis():
     if request.method == 'POST':
         code_maquis = request.form['code_maquis']
-        # Ici, nous devons vérifier le code maquis
-        # Supposons qu'il y a une fonction pour vérifier le code
-        from backend.read_data import get_maquis_by_code
         maquis = get_maquis_by_code(code_maquis)
         if maquis:
             # Créer un utilisateur maquis ou gérer la session
             session['connecter'] = True
             session['maquis_id'] = maquis['id']
-            session['role'] = 'maquis'
-            session['username'] = maquis['nom']  # Supposons qu'il y a un nom
+            session['maquis_nom'] = maquis['nom'] 
+            session['maquis_code'] = code_maquis
             return redirect(url_for("commission"))  # Rediriger vers la page commission
         else:
             flash("Code maquis incorrect, Veuillez réessayer.", "danger")
@@ -156,7 +154,7 @@ def api_commandes():
     nom =f"Cli-{random.randint(100, 999)}"  # Générer un nom de client basé sur les derniers chiffres du code de commande
     statut = "Nouvelle_commande"
     prix_unitaire = 5000
-    contactMessage=f"225{contact.strip().replace(" ","")}"
+    contactMessage=f"2250716955143"
     Message(contactMessage,datetime.now().strftime("%d-%m-%Y %H:%M "),Numcode,total,commune)
 
     if not commune or not contact or not qty:
@@ -184,7 +182,7 @@ def api_commandes():
 
 @app.route("/commission")
 def commission():
-    maquis_id = session.get('maquis_id', 77)  # Utiliser 77 par défaut si pas de session
+    maquis_id = session.get('maquis_id')
     data = read_commission(maquis_id= maquis_id)
     unique_commands = len(set(c['id_commande'] for c in data))
     total_com = sum(c['commission'] for c in data)
@@ -210,6 +208,10 @@ def api_commissions():
         "total_com": total_com,
         "commissions": commissions
     })
+
+@app.route("/livreur")
+def livreur():
+    return render_template("livreur-commandes.html")
 
 @app.route("/code-qr")
 def code_qr():

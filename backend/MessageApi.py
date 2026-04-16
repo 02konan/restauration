@@ -4,9 +4,9 @@ def Message(numero,date,numCmd,montant,lieu):
         url ="{{apiUrl}}/waInstance{{idInstance}}/sendMessage/{{apiTokenInstance}}"
         payload = {
         "chatId": f"{numero}@c.us", 
-        "message": f"Votre commande a été bien enrégistrée.\n\n*Date*: {date}\n*N°commande*: {numCmd}\n*Montant total*: {montant} FCFA\n*Lieu de livraison*: {lieu} \n\nUn commercial vous contactera pour validation dans quelques minutes.",  
+        "message": f"Nouvelle Commande.\n\n*Date*: {date}\n*N°commande*: {numCmd}\n*Montant total*: {montant} FCFA\n*Lieu de livraison*: {lieu}",  
         "customPreview": {
-            "title": "BonPoulet - Confirmation",
+            "title": "BonPoulet - Nouvelle Commande",
             "description": f"Commande #{numCmd}"
         }
         }
