@@ -79,12 +79,11 @@ def login_maquis():
         code_maquis = request.form['code_maquis']
         maquis = get_maquis_by_code(code_maquis)
         if maquis:
-            # Créer un utilisateur maquis ou gérer la session
             session['connecter'] = True
             session['maquis_id'] = maquis['id']
             session['maquis_nom'] = maquis['nom'] 
             session['maquis_code'] = code_maquis
-            return redirect(url_for("commission"))  # Rediriger vers la page commission
+            return redirect(url_for("commission"))
         else:
             flash("Code maquis incorrect, Veuillez réessayer.", "danger")
     return render_template('login_maquis.html')
@@ -182,31 +181,35 @@ def api_commandes():
 
 @app.route("/commission")
 def commission():
-    maquis_id = session.get('maquis_id')
-    data = read_commission(maquis_id= maquis_id)
-    unique_commands = len(set(c['id_commande'] for c in data))
-    total_com = sum(c['commission'] for c in data)
-    commissions = []
-    for row in data:
-         commissions.append({
-                'id_commande': row[0],  # Nouveau champ
-                'nom_produit': row[1],  # Était row[0] avant
-                'commission': row[2],   # Était row[1]
-                'date_commande': row[3], # Était row[2]
-                'quantite': row[4]      # Était row[3]
-            })
-        
-    return render_template("commission.html", commissions=commissions, unique_commands=unique_commands, total_com=total_com)
+    return render_template("commission.html")
+    
+    
 
 @app.route("/api/commissions")
 def api_commissions():
-    commissions = read_commission(maquis_id= 15)
-    unique_commands = len(set(c['id_commande'] for c in commissions))
-    total_com = sum(c['commission'] for c in commissions)
+    maquis_id = session['maquis_code']
+    data = read_commission(maquis_id)
+    total_commission = 0
+    table=[]
+    
+    for i in data:
+        information={
+            "id":i[0],
+            "produit":i[1],
+            "commission":i[2],
+            "date":i[3],
+            "quantite":i[4]
+        }
+        total_commission += i[2]
+        
+        table.append(information) 
+    total_commande = len(table)
+    total_commission = total_commission
+    
     return jsonify({
-        "unique_commands": unique_commands,
-        "total_com": total_com,
-        "commissions": commissions
+        "commandes" : table,
+        "total_commande": total_commande,
+        "total_commission": total_commission
     })
 
 @app.route("/livreur")

@@ -70,6 +70,7 @@ def get_maquis_by_code(code):
                 row = cursor.fetchone()
                 if row:
                     return {'id': row[0], 'nom': row[1], 'code': row[2]}
+                return None
     except Exception as e:
         return f'{e}'
 
@@ -93,7 +94,7 @@ def read_commission(maquis_id):
             JOIN 
                 maquis ON commandes.code = maquis.code
             WHERE 
-                maquis.id = %s
+                maquis.code = %s
             ORDER BY 
                 commandes.date_commande DESC
                 """

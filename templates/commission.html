@@ -17,12 +17,12 @@
 
     <div class="container-fluid p-0 d-flex gap-2">
         <div class="col commission-items">
-            <h3>{{ unique_commands }}</h3>
-            <p class="small text-muted text-white">Commandes</p>
+            <h3>0</h3>
+            <p class="small text-white">Commandes</p>
         </div>
         <div class="col commission-items">
-            <h3>{{ total_com }} F</h3>
-            <p class="small text-muted text-white">Commission du</p>
+            <h3>0 F</h3>
+            <p class="small text-white">Commission du</p>
         </div>
     </div>
 
@@ -32,25 +32,8 @@
     </div>
 
     <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande">
-    {% for commission in commissions %}
-    <div class="order-item shadow-sm">
-        <div class="content w-100 d-flex gap-3">
-            <div class="image">
-                <img src="{{ url_for('static', filename='back/back0.png') }}" alt="">
-            </div>
-            <div class="text d-flex flex-column ">
-                <h3>{{ commission.nom_produit }} <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
-                <div class="small text-muted desc">Commission pour ce produit</div>
-                <div class="price-tag">{{ commission.commission }} F</div>
-            </div>
-            <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                <p class="small text-muted date">{{ commission.date_commande.strftime('%d %b %Y') if commission.date_commande else 'N/A' }}</p>
-                <p class="quantity ms-auto">{{ commission.quantite }}</p>
-            </div>
-        </div>
+   
     </div>
-    {% endfor %}
-</div>
 </div>
 <!-- <footer>Du Bon Poulet Braisé — Commandez et gagnez des commissions avec votre code promo</footer> -->
 <script>
@@ -70,11 +53,11 @@
                 const totalComElement = document.querySelector('.commission-items:nth-child(2) h3');
                 
                 if (uniqueCommandsElement) {
-                    uniqueCommandsElement.textContent = data.unique_commands;
+                    uniqueCommandsElement.textContent = data.total_commande;
                 }
                 
                 if (totalComElement) {
-                    totalComElement.textContent = data.total_com + ' F';
+                    totalComElement.textContent = data.total_commission + ' F';
                 }
                 
                 // Mettre à jour la liste des commissions
@@ -83,8 +66,8 @@
                     const oldHeight = listContainer.scrollHeight;
                     listContainer.innerHTML = '';
                     
-                    if (data.commissions && data.commissions.length > 0) {
-                        data.commissions.forEach(commission => {
+                    if (data.commandes && data.commandes.length > 0) {
+                        data.commandes.forEach(commission => {
                             const item = document.createElement('div');
                             item.className = 'order-item shadow-sm';
                             item.innerHTML = `
@@ -93,12 +76,12 @@
                                         <img src="{{ url_for('static', filename='back/back0.png') }}" alt="">
                                     </div>
                                     <div class="text d-flex flex-column">
-                                        <h3>${escapeHtml(commission.nom_produit)} <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
+                                        <h3>${escapeHtml(commission.produit)} <span class="dot dot-success"><i class="bi bi-check-circle-fill"></i></span></h3>
                                         <div class="small text-muted desc">Commission pour ce produit</div>
                                         <div class="price-tag">${commission.commission} F</div>
                                     </div>
                                     <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                                        <p class="small text-muted date">${commission.date_commande ? new Date(commission.date_commande).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</p>
+                                        <p class="small text-muted date">${commission.date ? new Date(commission.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</p>
                                         <p class="quantity ms-auto">${commission.quantite}</p>
                                     </div>
                                 </div>
