@@ -48,6 +48,13 @@ i{
     padding: 0;
     box-sizing: border-box;
 }
+.date-input{
+    outline: none;
+}
+.date-input:focus{
+    border: 0;
+    outline: none;
+}
 .main{
     padding-left: 20px !important;
     padding-right: 20px !important;

@@ -109,8 +109,12 @@
             <!-- </div>
         </nav> -->
 
-        <div class="container-fluid d-flex">
-            <a href="/logout" class="ms-auto">Se connecter</a>
+        <div class="container-fluid d-flex align-items-center">
+            <div class="">
+                <h5 class="m-0 p-0">{{session['username']}}</h5>
+                <span class="small text-muted">{{session['role']}}</span>
+            </div>
+            <a href="/logout" class="ms-auto">Se deconnecter<i class="bi bi-box-arrow-right ms-2"></i></a>
         </div>
 
         <div class="container-fluid p-0 banner">
@@ -127,16 +131,20 @@
             </span>
         </div>
 
-        <form action="" class="d-flex align-items-center px-3 py-2 rounded-pill animation-slide" id="searchForm">
-            <i class="bi bi-search me-2"></i>
-            <input type="text" class="" placeholder="Recherche..." id="searchInput" name="searchInput">
-        </form>
+        <div class="w-100 d-flex gap-2">
+            <form action="" class="d-flex col-10 align-items-center px-3 py-3 rounded-pill animation-slide" id="searchForm">
+                <i class="bi bi-search me-2"></i>
+                <input type="text" class="" placeholder="Recherche..." id="searchInput" name="searchInput">
+            </form>
+            <div class="d-flex col-2 align-items-center px-3 py-3 rounded-pill animation-slide" style="background: #fff;">
+                <input type="date" class="border-0  date-input" placeholder="Recherche..." id="searchInput" name="searchInput">
+            </div>
+        </div>
 
         <div class="d-flex gap-2 mt-2 filter-pills animation-slide" id="filterPills">
             <button type="button" class="btn btn-sm rounded-pill filter-pill active" data-filter="">Tous</button>
             <button type="button" class="btn btn-sm rounded-pill filter-pill" data-filter="en_preparation">Traiter</button>
             <button type="button" class="btn btn-sm rounded-pill filter-pill" data-filter="livree">Livrée</button>
-            <input type="date" class="btn btn-sm rounded-pill filter-pill" data-filter="livree">
         </div>
         <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande animation-slide" id="result-commande">
             
