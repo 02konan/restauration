@@ -150,11 +150,17 @@ def api_commandes():
     subtotal = data.get("subtotal")
     total = data.get("total")
     promo = data.get("promo_code") or None
-    nom =f"Cli-{random.randint(100, 999)}"  # Générer un nom de client basé sur les derniers chiffres du code de commande
+    nom =f"Cli-{random.randint(100, 999)}"
     statut = "Nouvelle_commande"
     prix_unitaire = 5000
-    contactMessage=f"2250716955143"
-    Message(contactMessage,datetime.now().strftime("%d-%m-%Y %H:%M "),Numcode,total,commune)
+    contactMessage = "225" + contact.strip().replace(" ", "")[2:]
+    
+    if promo is None:
+        code="Aucun"
+    else:
+        code=promo    
+    
+    Message(contactMessage,datetime.now().strftime("%d-%m-%Y %H:%M "),Numcode,total,commune,qty,code)
 
     if not commune or not contact or not qty:
         return jsonify({"error": "Les champs obligatoires sont manquants"}), 400
