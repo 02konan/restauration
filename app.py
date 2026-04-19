@@ -154,13 +154,17 @@ def api_commandes():
     statut = "Nouvelle_commande"
     prix_unitaire = 5000
     contactMessage = "225" + contact.strip().replace(" ", "")[2:]
+    dateMesssage=datetime.now().strftime("%d-%m-%Y %H:%M ")
     
     if promo is None:
         code="Aucun"
+        telPatenaire=""
     else:
-        code=promo    
+        code=promo
+        data=get_maquis_by_code(code)
+        telPatenaire="225" + data["telephone"].strip().replace(" ", "")[2:] 
     
-    Message(contactMessage,datetime.now().strftime("%d-%m-%Y %H:%M "),Numcode,total,commune,qty,code)
+    Message(contactMessage,telPatenaire,dateMesssage,Numcode,total,commune,qty,code)
 
     if not commune or not contact or not qty:
         return jsonify({"error": "Les champs obligatoires sont manquants"}), 400

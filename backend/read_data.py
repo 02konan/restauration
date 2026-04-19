@@ -66,10 +66,10 @@ def get_maquis_by_code(code):
     try:
         with connexion() as conn:
             with conn.cursor() as cursor:
-                cursor.execute("SELECT id, nom, code FROM maquis WHERE code = %s", (code,))
+                cursor.execute("SELECT id, nom, code,telephone FROM maquis WHERE code = %s", (code,))
                 row = cursor.fetchone()
                 if row:
-                    return {'id': row[0], 'nom': row[1], 'code': row[2]}
+                    return {'id': row[0], 'nom': row[1], 'code': row[2],'telephone': row[3]}
                 return None
     except Exception as e:
         return f'{e}'
