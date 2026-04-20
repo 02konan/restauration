@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from flask_cors import CORS
@@ -10,13 +11,11 @@ from backend.read_data import get_maquis_by_code
 from datetime import timedelta,datetime
 from backend.Auth import Authentification
 import random
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-app.config["SECRET_KEY"] = os.environ.get(
-    "SECRET_KEY",
-    "Biometricifsm@2025divix_bonpouletmysql-divix.alwaysdata.netdivix",
-)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 app.permanent_session_lifetime= timedelta(minutes=5)
 
@@ -97,8 +96,9 @@ def Page_client():
 def Page_Dashboard():
     if request.method == "POST":
         status = request.form.get("Traiter") or request.form.get("Livrer")
+        id_utilisateur=session['identifiant']
         id_commande = request.form.get("id_commande")
-        update_commande(id_commande, status)
+        update_commande(id_commande, status,id_utilisateur)
         return redirect(url_for("Page_Dashboard"))
     return render_template("all-commandes.html")
 

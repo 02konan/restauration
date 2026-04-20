@@ -1,20 +1,14 @@
 import pymysql
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def connexion():
     connexion = pymysql.connect(
-        host='mysql-divix.alwaysdata.net',
-        user='divix',
-        password='Biometricifsm@2025',
-        database='divix_bonpoulet'
+        host=os.getenv("HOST"),
+        user=os.getenv("USER"),
+        password=os.getenv("DB_PWD"),
+        database=os.getenv("DB")
     )
     return connexion
-
-# def connexion():
-#     connexion = pymysql.connect(
-#         host='mysql-divix.alwaysdata.net',
-#         user='divix',
-#         password='Biometricifsm@2025',
-#         database='divix_testeur'
-#     )
-#     return connexion
 

@@ -152,7 +152,7 @@ function initializeDetailsModal() {
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editForm">
+                        <form id="editForm" method="POST" action="/Dashboard">
                             <input type="hidden" name="id" id="editId">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -214,6 +214,7 @@ function initializeDetailsModal() {
             </div>
         `;
     }
+   
 }
 
 function fillDetailsModal(cmd) {

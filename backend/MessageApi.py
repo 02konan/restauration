@@ -1,6 +1,10 @@
 import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 def Message(numero_client,numero_patenaire,date,numCmd,montant,lieu,qty,code):
-    url ="https://7107.api.greenapi.com/waInstance7107590273/sendMessage/209f0a339a104043b938f7640285205878bc17f52eab4990ab"
+    url =os.getenv("GRENN_API")
     try:
     
             headers = {
