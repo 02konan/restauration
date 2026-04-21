@@ -25,25 +25,34 @@ def liste_commandes():
         with connexion() as conn:
             with conn.cursor() as cursor:
                 cursor.execute("""
-               SELECT 
-    clients.nom,
-    clients.telephone,
-    commandes.id AS id_commande,
-    produits.nom AS produits,
-    produits.id AS id_produit,
-    commandes.statut,
-    commandes.Numcode,
-    commandes.code,
-    ligne_commandes.quantite,
-    ligne_commandes.Total,
-    commandes.date_commande AS date_commande,
-    commandes.Commune AS lieu
-FROM ligne_commandes
-JOIN produits ON ligne_commandes.id_produit = produits.id
-JOIN commandes ON ligne_commandes.id_commande = commandes.id
-JOIN clients ON commandes.id_client = clients.id
-WHERE commandes.statut != "livree"
-ORDER BY commandes.Numcode DESC;
+                SELECT 
+                    clients.nom,
+                    clients.telephone,
+                    commandes.id AS id_commande,
+                    produits.nom AS produits,
+                    produits.id AS id_produit,
+                    commandes.statut,
+                    commandes.Numcode,
+                    commandes.code,
+                    ligne_commandes.quantite,
+                    ligne_commandes.Total,
+                    commandes.date_commande AS date_commande,
+                    commandes.Commune AS lieu
+                FROM ligne_commandes
+                JOIN produits ON ligne_commandes.id_produit = produits.id
+                JOIN commandes ON ligne_commandes.id_commande = commandes.id
+                JOIN clients ON commandes.id_client = clients.id
+                WHERE commandes.Active = 0
+                    AND commandes.date_commande >= CURDATE()
+                    AND commandes.date_commande < CURDATE() + INTERVAL 1 DAY
+                ORDER BY 
+                CASE commandes.statut
+                    WHEN 'Nouvelle_commande' THEN 1
+                    WHEN 'Enpreparation' THEN 2
+                    WHEN 'livree' THEN 3
+                    ELSE 4
+                END,
+                commandes.Numcode DESC;
                                """)
                 commandes = cursor.fetchall()
                 return commandes
