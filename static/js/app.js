@@ -44,7 +44,7 @@ function commandeClient() {
     .then(res => res.json())
     .then(response => {
         const currentCount = response.count;
-                if (previousCommandCount !== null && currentCount !== previousCommandCount) {
+                if (previousCommandCount !== null && currentCount > previousCommandCount) {
                     playNotificationSound();
                     
                 }
@@ -110,7 +110,7 @@ function afficheCommande(commande) {
                         </span>
                     </div>
                     <div class="small text-muted desc mt-2">
-                        Du bon poulet braisé accompagné d'une boule d'attitété
+                        Du bon poulet braisé accompagné d'une boule d'attiéké
                     </div>
                     <div class="price-tag mt-auto">${cmd.Total}</div>
                 </div>
