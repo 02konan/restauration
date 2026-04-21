@@ -210,8 +210,8 @@ function initializeDetailsModal() {
                         <button type="submit" class="btn btn-custom-primary">Livrer</button>
                     </form>
                     <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
-                        <input type="hidden" name="id_commande" id="detailOrderIdTraiter">
-                        <input type="hidden" name="date_commande" id="detaildatedLivrer">
+                        <input type="hidden" name="id_commande" id="detailOrderIdAnnuler">
+                        <input type="hidden" name="date_commande" id="detaildatedAnnuler">
                         <input type="hidden" name="Annuler" value="1">
                         <button type="submit" class="btn btn-primary">Annuler</button>
                     </form>
@@ -239,6 +239,7 @@ function fillDetailsModal(cmd) {
     document.getElementById("detailTotal").textContent = cmd.Total || "0";
     document.getElementById("detailOrderIdTraiter").value = cmd.id_commande || cmd.id_produits || "";
     document.getElementById("detailOrderIdLivrer").value = cmd.id_commande || cmd.id_produits || "";
+    document.getElementById("detailOrderIdAnnuler").value = cmd.id_commande || cmd.id_produits || "";
 
     const footer = document.getElementById("detailsModalFooter");
     if (footer) {

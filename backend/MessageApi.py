@@ -44,7 +44,7 @@ def Message(numero_client,numero_patenaire,date,numCmd,montant,lieu,qty,code):
                     f"*Date*: {date}\n"
                     f"*N°commande*: {numCmd}\n"
                     f"*Quantité*: {qty}\n"
-                    f"*Commission*: {qty}*300\n"
+                    f"*Commission*: {qty*300}\n"
                     f"Chaque achat avec votre code vous rapporte. Partagez sans limite."
                 )
 

@@ -82,6 +82,7 @@ def login_maquis():
             session['maquis_id'] = maquis['id']
             session['maquis_nom'] = maquis['nom'] 
             session['maquis_code'] = code_maquis
+            session['role'] = "Maquis"
             return redirect(url_for("commission"))
         else:
             flash("Code maquis incorrect, Veuillez réessayer.", "danger")
@@ -92,13 +93,13 @@ def Page_client():
     return render_template("commande.html")
 
 @app.route("/Dashboard",methods=["POST","GET"])
-
 def Page_Dashboard():
     if request.method == "POST":
-        status = request.form.get("Traiter") or request.form.get("Livrer")
+        status = request.form.get("Traiter") or request.form.get("Livrer") or None
+        active=request.form.get("Annuler") or None
         id_utilisateur=session['identifiant']
         id_commande = request.form.get("id_commande")
-        update_commande(id_commande, status,id_utilisateur)
+        update_commande(id_commande, status, id_utilisateur,active)
         return redirect(url_for("Page_Dashboard"))
     return render_template("all-commandes.html")
 
@@ -229,7 +230,7 @@ def livreur():
 @app.route("/code-qr")
 def code_qr():
     maquis_code = get_maquis_code(15)
-    return render_template("code-qr.html", maquis_code=maquis_code)
+    return render_template("code-qr.html", maquis_code=maquis_code, active="code")
 
 @app.route("/profile")
 def Page_profile():

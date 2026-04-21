@@ -18,26 +18,34 @@
 
     <body>
         <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
-            <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary shadow position-fixed">
+            {% if session["connecter"]  %}
+            <nav class="navbar navbar-expand-lg bg-body-tertiary shadow position-fixed">
                 <div class="container-fluid d-flex justify-content-center ">
                     <div class="w-100" id="">
                         <ul class="navbar-nav mb-2 mb-lg-0">
+                            {% if session['role'] == "Admin" %}
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/"><i class="bi bi-bag-fill"></i> <span class="ms-1">Commandes</span></a>
+                                <a class="nav-link active" aria-current="page" href="/Dashboard"><i class="bi bi-bag-fill"></i> <span class="ms-1">Commandes</span></a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/carte"><i class="bi bi-cart bi-simple"></i><i class="bi bi-cart-fill bi-active"></i><span class="ms-1">Panier</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/code-QR"><i class="bi bi-ticket bi-simple"></i><i class="bi bi-ticket-fill bi-active"></i> <span class="ms-1">Code promo</span></a>
-                            </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="/profile"><i class="bi bi-person bi-simple"></i> <i class="bi bi-person-fill bi-active"></i> <span class="ms-1">Profil</span></a>
-                            </li>
+                            </li> -->
+                            {% elif session['role'] == "Maquis"  %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ 'active' if request.path == '/commission' else '' }}" aria-current="page" href="/commission"><i class="bi bi-cash-stack"></i> <span class="ms-1">Commissions</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  {{ 'active' if request.path == '/code-qr' else '' }}" href="/code-qr"><i class="bi bi-qr-code"></i><span class="ms-1">Code Qr</span></a>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a class="nav-link" href="/profile"><i class="bi bi-person bi-simple"></i> <i class="bi bi-person-fill bi-active"></i> <span class="ms-1">Profil</span></a>
+                                </li> -->
+                            {% endif %}
                         </ul>
                     </div>
                  </div>
-            </nav>  -->
+            </nav>
+            {% endif %} 
 
             {% block content %}
              {% if active_page == 'index' %}

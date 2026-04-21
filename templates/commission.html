@@ -2,10 +2,11 @@
    {% block content %}
   <!-- LEFT SIDE: INTERFACE 1 (Mes commandes) + INTERFACE 2 (Passer commande) + INTERFACE 3 (Confirmation) 
        but we combine to replicate full flow but visually show all screens as per design -->
-<div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
-    
-    <div class="container-fluid d-flex">
-        <p class="text-muted ms-auto user"> <strong>Partenaire: {{ session['maquis_nom'] }}</strong></p>
+<div class="container-fluid p-0 d-flex flex-column gap-3 main">
+        
+    <div class="container-fluid d-flex w-100">
+        <p class="text-muted user"> {{ session['maquis_nom'] }}</p>
+        <a href="/logout" class="ms-auto">Se deconnecter<i class="bi bi-box-arrow-right ms-2"></i></a>
     </div>
     <div class="container-fluid p-0 banner">
         <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
