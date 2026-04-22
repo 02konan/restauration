@@ -60,6 +60,46 @@ def liste_commandes():
     except Exception as e:
         return (f"Erreur lors de la récupération des commandes: {e}")
 
+def commande_livreur():
+    try:
+        with connexion() as conn:
+            with conn.cursor() as cursor:
+                sql="""
+                    SELECT 
+                        clients.nom,
+                        clients.telephone,
+                        commandes.id AS id_commande,
+                        produits.nom AS produits,
+                        produits.id AS id_produit,
+                        commandes.statut,
+                        commandes.Numcode,
+                        commandes.code,
+                        ligne_commandes.quantite,
+                        ligne_commandes.Total,
+                        commandes.date_commande AS date_commande,
+                        commandes.Commune AS lieu
+                    FROM ligne_commandes
+                    JOIN produits ON ligne_commandes.id_produit = produits.id
+                    JOIN commandes ON ligne_commandes.id_commande = commandes.id
+                    JOIN clients ON commandes.id_client = clients.id
+                    WHERE commandes.Active = 0
+                        AND commandes.date_commande >= CURDATE()
+                        AND commandes.date_commande < CURDATE() + INTERVAL 1 DAY
+                    ORDER BY 
+                    CASE commandes.statut
+                        WHEN 'Enpreparation' THEN 1
+                        WHEN 'livree' THEN 2
+                        ELSE 3
+                    END,
+                    commandes.Numcode DESC;
+                """
+                cursor.execute(sql)
+                result=cursor.fetchall()
+            return result
+                
+    except Exception as e:
+        return None
+
 def get_maquis_code(maquis_id):
     try:
        with connexion() as conn:
@@ -94,20 +134,19 @@ def read_commission(maquis_id):
                 300 * ligne_commandes.quantite AS commission,
                 commandes.date_commande,
                 ligne_commandes.quantite
-            FROM 
-                commandes 
-            JOIN 
-                ligne_commandes ON commandes.id = ligne_commandes.id_commande 
-            JOIN 
-                produits ON ligne_commandes.id_produit = produits.id
-            JOIN 
-                maquis ON commandes.code = maquis.code
-            WHERE 
-                maquis.code = %s
-            ORDER BY 
-                commandes.date_commande DESC
+                FROM 
+                    commandes 
+                JOIN 
+                    ligne_commandes ON commandes.id = ligne_commandes.id_commande 
+                JOIN 
+                    produits ON ligne_commandes.id_produit = produits.id
+                JOIN 
+                    maquis ON commandes.code = maquis.code
+                WHERE 
+                    maquis.code = %s
+                ORDER BY 
+                    commandes.date_commande DESC
                 """
-                
                 cursor.execute(sql, (maquis_id,))
                 rows = cursor.fetchall()
         return rows

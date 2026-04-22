@@ -310,10 +310,11 @@
                     locateBtn.disabled = true; // Désactiver le bouton pendant le chargement
                     
                     navigator.geolocation.getCurrentPosition(async (position) => {
+
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
-                
-                         let lieu = document.getElementById('lieu').value
+                        let lieu = document.getElementById('lieu').value
+
                         try {
                             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
                             const data = await response.json();
@@ -322,6 +323,7 @@
                             document.getElementById('lieu').value = address;
                             document.getElementById('latitude').value = lat;
                             document.getElementById('longitude').value = lng;
+                            
                         } catch (error) {
                             console.error('Erreur de géocodage inverse:', error);
                             document.getElementById('lieu').value = `Latitude: ${lat}, Longitude: ${lng}`;

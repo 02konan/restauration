@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from flask_cors import CORS
 from flask_login import current_user,LoginManager,login_user
 from backend.creat_data import create_commande, update_commande
-from backend.read_data import liste_commandes, read_commission, get_maquis_code,get_user_id
+from backend.read_data import liste_commandes, read_commission, get_maquis_code,get_user_id,commande_livreur
 from backend.MessageApi import Message
 from backend.Models import User
 from backend.read_data import get_maquis_by_code
@@ -30,79 +30,11 @@ def load_user(id_user):
 
 @app.before_request
 def restriction():
-    tab_route = ["home","formcommande","login","login_maquis","api_commandes","livreur","static"] 
+    tab_route = ["home","formcommande","login","login_maquis","livreur","api_commandes","static"] 
     if not (current_user.is_authenticated or session.get('connecter')) and request.endpoint not in tab_route:
         return redirect(url_for("login"))
 
-@app.route("/form-commande")
-def formcommande():
-    return render_template("form-commande.html")
-
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-@app.route("/login",methods=["POST","GET"])
-def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        utilisateur = Authentification(email, password)
-        if utilisateur:
-            load_user(utilisateur['id'])
-            user = User(
-                utilisateur['id'],
-                utilisateur['id_role'],
-                utilisateur['nom'],
-                utilisateur['email'],
-                utilisateur['nom_roles']
-            )
-            login_user(user)
-            session.permanent = True
-            session['connecter'] = True
-            session['identifiant'] = int(utilisateur['id'])
-            session['role'] = utilisateur['nom_roles']
-            session['username'] = utilisateur['nom']
-            if session['role'].lower() == 'admin':
-               return redirect(url_for("Page_Dashboard"))
-            else:
-               return redirect(url_for("Page_client"))
-        else:
-            flash("Email ou mot de passe incorrect, Veuillez réessayer.", "danger")
-    return render_template('login.html')
-         
-@app.route("/login_maquis", methods=["POST", "GET"])
-def login_maquis():
-    if request.method == 'POST':
-        code_maquis = request.form['code_maquis']
-        maquis = get_maquis_by_code(code_maquis)
-        if maquis:
-            session['connecter'] = True
-            session['maquis_id'] = maquis['id']
-            session['maquis_nom'] = maquis['nom'] 
-            session['maquis_code'] = code_maquis
-            session['role'] = "Maquis"
-            return redirect(url_for("commission"))
-        else:
-            flash("Code maquis incorrect, Veuillez réessayer.", "danger")
-    return render_template('login_maquis.html')
-
-@app.route("/Client")
-def Page_client():
-    return render_template("commande.html")
-
-@app.route("/Dashboard",methods=["POST","GET"])
-def Page_Dashboard():
-    if request.method == "POST":
-        status = request.form.get("Traiter") or request.form.get("Livrer") or None
-        active=request.form.get("Annuler") or None
-        id_utilisateur=session['identifiant']
-        id_commande = request.form.get("id_commande")
-        update_commande(id_commande, status, id_utilisateur,active)
-        return redirect(url_for("Page_Dashboard"))
-    return render_template("all-commandes.html")
-
+#  data Api route
 @app.route("/commande-client")
 def Page_commande():
     data=liste_commandes()
@@ -129,15 +61,35 @@ def Page_commande():
             "data":table,
             "count":len(table)
         })
+
+@app.route("/api/livreur")
+def Page_livreur():
+    data=commande_livreur()
+    table=[]
+    if data:
+        for i in data:
+            table.append({
+            "Client":i[0],
+            "telephone":i[1],
+            "id_commande":i[2],
+            "produits":i[3],
+            "id_produits":i[4],
+            "status":i[5],
+            "Numcommande":i[6],
+            "code":i[7],
+            "quantite":i[8],
+            "Total":i[9],
+            "date_commande":i[10],
+            "lieu":i[11]
+            })
+            
+    return jsonify({
+            "succes":True,
+            "data":table,
+            "count":len(table)
+        })
  
-@app.route("/Commande")
-def commande():
-    return render_template("all-commandes.html")
-
-@app.route('/inscriptionPartenaire')
-def partenaire():
-    return render_template('inscription-partner.html')
-
+ 
 @app.route("/api/actionCommande", methods=["POST"])
 def api_commandes():
     data = request.get_json(silent=True)
@@ -190,12 +142,6 @@ def api_commandes():
         },
     }), 200
 
-@app.route("/commission")
-def commission():
-    return render_template("commission.html")
-    
-    
-
 @app.route("/api/commissions")
 def api_commissions():
     maquis_id = session['maquis_code']
@@ -222,6 +168,95 @@ def api_commissions():
         "total_commande": total_commande,
         "total_commission": total_commission
     })
+
+# index
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+# login route
+@app.route("/login",methods=["POST","GET"])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        utilisateur = Authentification(email, password)
+        if utilisateur:
+            load_user(utilisateur['id'])
+            user = User(
+                utilisateur['id'],
+                utilisateur['id_role'],
+                utilisateur['nom'],
+                utilisateur['email'],
+                utilisateur['nom_roles']
+            )
+            login_user(user)
+            session.permanent = True
+            session['connecter'] = True
+            session['identifiant'] = int(utilisateur['id'])
+            session['role'] = utilisateur['nom_roles']
+            session['username'] = utilisateur['nom']
+            if session['role'].lower() == 'admin':
+               return redirect(url_for("Page_Dashboard"))
+            else:
+               return redirect(url_for("Page_client"))
+        else:
+            flash("Email ou mot de passe incorrect, Veuillez réessayer.", "danger")
+    return render_template('login.html')
+         
+@app.route("/login_maquis", methods=["POST", "GET"])
+def login_maquis():
+    if request.method == 'POST':
+        code_maquis = request.form['code_maquis']
+        maquis = get_maquis_by_code(code_maquis)
+        if maquis:
+            session['connecter'] = True
+            session['maquis_id'] = maquis['id']
+            session['maquis_nom'] = maquis['nom'] 
+            session['maquis_code'] = code_maquis
+            session['role'] = "Maquis"
+            return redirect(url_for("commission"))
+        else:
+            flash("Code maquis incorrect, Veuillez réessayer.", "danger")
+    return render_template('login_maquis.html')
+
+# Page route
+@app.route("/form-commande")
+def formcommande():
+    return render_template("form-commande.html")
+
+@app.route("/Client")
+def Page_client():
+    return render_template("commande.html")
+
+@app.route("/Dashboard",methods=["POST","GET"])
+def Page_Dashboard():
+    if request.method == "POST":
+        
+        section=request.form.get("id_section")
+        action = request.form.get("action")
+        id_utilisateur=session['identifiant']
+        id_commande = request.form.get("id_commande")
+        
+        print(section)
+        
+        update_commande(id_commande, action, id_utilisateur)
+        
+        return redirect(url_for("Page_Dashboard"))
+    return render_template("all-commandes.html")
+
+@app.route("/Commande")
+def commande():
+    return render_template("all-commandes.html")
+
+@app.route('/inscriptionPartenaire')
+def partenaire():
+    return render_template('inscription-partner.html')
+
+@app.route("/commission")
+def commission():
+    return render_template("commission.html")
 
 @app.route("/livreur")
 def livreur():
