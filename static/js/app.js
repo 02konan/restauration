@@ -41,11 +41,15 @@ let previousCommandCount = null;
 
 const role= '{{session["role"]}}'
 
-let btnlivreur = ""
+let btnlivreur = '';
+
 if (role === 'Admin') {
-    btnlivreur=`<button type="submit" name="action" id="detailOrderIdLivrer" value="livree" class="btn btn-custom-primary">Livrer</button>`
-}else{
-     btnlivreur=` <button type="submit" name="action" id="detailOrderIdTraiter"  value="Enpreparation" class="btn btn-custom-secondary">Traiter</button>`
+    btnlivreur = `
+        <button type="submit" name="action" id="detailOrderIdLivrer" value="livree" class="btn btn-custom-primary">
+            Livrer
+        </button>`;
+} else {
+        btnlivreur = `<button type="submit" class="btn btn-custom-secondary" name="action" value="Enpreparation">Traiter</button>`
 }
 
 function commandeClient() {
@@ -206,11 +210,11 @@ function initializeDetailsModal() {
                         </form>
                     </div>
                     <div class="modal-footer" id="detailsModalFooter">
+                        
                     <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
                         <input type="hidden" name="id_commande" id="detailOrderId">
-                        <input type="hidden" name="date_commande" id="detailDateCommande"
                         ${btnlivreur}
-                        <button type="submit" name="action" value="annuler" class="btn btn-primary">Annuler</button>
+                        <button type="submit" name="Annuler" value="1" class="btn btn-primary">Annuler</button>
                     </form>
                     </div>
                 </div>
@@ -234,10 +238,7 @@ function fillDetailsModal(cmd) {
     document.getElementById("detailContact").textContent = cmd.telephone || cmd.contact || "N/A";
     document.getElementById("detailQuantite").textContent = cmd.quantite || "0";
     document.getElementById("detailTotal").textContent = cmd.Total || "0";
-    document.getElementById("detailOrderIdTraiter").value = cmd.id_commande || cmd.id_produits || "";
-    document.getElementById("detailOrderIdLivrer").value = cmd.id_commande || cmd.id_produits || "";
-    document.getElementById("detailOrderIdAnnuler").value = cmd.id_commande || cmd.id_produits || "";
-
+    document.getElementById("detailOrderId").value = cmd.id_commande || cmd.id_produits || "";
     const footer = document.getElementById("detailsModalFooter");
     if (footer) {
         const status = (cmd.status || "").toString().toLowerCase();
