@@ -39,17 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 let previousCommandCount = null;
 
-const role= '{{session["role"]}}'
+const role= "{{session['role']}}"
 
 let btnlivreur = '';
 
-if (role === 'Admin') {
+if (role === 'livreur') {
     btnlivreur = `
         <button type="submit" name="action" id="detailOrderIdLivrer" value="livree" class="btn btn-custom-primary">
             Livrer
         </button>`;
 } else {
-        btnlivreur = `<button type="submit" class="btn btn-custom-secondary" name="action" value="Enpreparation">Traiter</button>`
+    btnlivreur = `<button type="submit" class="btn btn-custom-secondary" name="action" value="Enpreparation">Traiter</button>`
 }
 
 function commandeClient() {
@@ -212,7 +212,15 @@ function initializeDetailsModal() {
                     <div class="modal-footer" id="detailsModalFooter">
                         
                     <form method="POST" action="/Dashboard" class="d-flex gap-2 mb-0">
-                        <input type="hidden" name="id_commande" id="detailOrderId">
+                     <input type="hidden" name="id_commande" id="detailOrderId">
+                        <div class="row">
+                            <div class="form-group">
+                                <select class="form-control" name="id_section">
+                                    <option value="">-- Sélectionner une section --</option>
+                                    <option value="16">Koumassi</option>
+                                </select>
+                            </div>
+                        </div>                
                         ${btnlivreur}
                         <button type="submit" name="Annuler" value="1" class="btn btn-primary">Annuler</button>
                     </form>

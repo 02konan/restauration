@@ -85,6 +85,8 @@ def commande_livreur():
                     WHERE commandes.Active = 0
                         AND commandes.date_commande >= CURDATE()
                         AND commandes.date_commande < CURDATE() + INTERVAL 1 DAY
+                        AND commandes.statut
+                        !='Nouvelle_commande'
                     ORDER BY 
                     CASE commandes.statut
                         WHEN 'Enpreparation' THEN 1
@@ -99,6 +101,26 @@ def commande_livreur():
                 
     except Exception as e:
         return None
+
+def get_livreur_num(numero):
+    try:
+       with connexion() as conn:
+           with conn.cursor() as cursor:
+                sql="""
+                SELECT
+                    etablissements.id as section, livreur.nom, livreur.contact as numero, abreviation
+                FROM
+                    `livreur`
+                JOIN etablissements ON livreur.id_etablissement=etablissements.id
+                WHERE contact=%s
+               """
+                cursor.execute(sql, (numero,))
+                row = cursor.fetchone()
+                if row:
+                    return {'id': row[0], 'nom': row[1], 'numero': row[2],'abreviation': row[3]}
+                return None 
+    except Exception as e:
+        return e
 
 def get_maquis_code(maquis_id):
     try:

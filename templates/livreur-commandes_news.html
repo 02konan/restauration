@@ -1,8 +1,7 @@
- {% extends 'base.html' %}
+{% extends 'base.html' %}
    {% block content %}
-  
-  
-    <style>
+   
+   <style>
     body{
         padding: 0 !important;
         height: 100vh;
@@ -171,39 +170,97 @@
         </div>
     </div>
 
-
-    <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
-        
-        <div class="container-fluid d-flex">
-            <a href="#" class="ms-auto">Se connecter</a>
-        </div>
-
-        <div class="container-fluid p-0 banner">
-            <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
-            <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center my-3 subtitle">
-            <h4 class="fw-bold">Livraisons</h4>
-            <span class="text-muted" id="livreuresults">
-            </span>
-        </div>
-
-        <form action="" class="d-flex align-items-center px-3 py-2 rounded-pill animation-slide" id="searchForm">
-            <i class="bi bi-search me-2"></i>
-            <input type="text" class="" placeholder="Recherche..." id="searchInput" name="searchInput">
-        </form>
-
-        <div class="d-flex gap-2 mt-2 filter-pills animation-slide" id="filterPills">
-            <button type="button" class="btn btn-sm rounded-pill filter-pill active" data-filter="">Tous</button>
-            <button type="button" class="btn btn-sm rounded-pill filter-pill" data-filter="en_preparation">Mes Livraisons</button>
-        </div>
-
-        <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande animation-slide" id="result-commande-livreur">
-            
-        </div>
-        <audio id="notificationSound" src="{{ url_for('static', filename='js/bip.wav') }}" preload="auto"></audio>
-    </div>
     
-{% endblock %}
+    <!-- Leaflet CSS + JS (OpenStreetMap - gratuit) -->
+   
+    <script>
+        // Variables globales
+        let currentPage = 1;
+        let currentFilters = new FormData();
+        let resultsPerPage = 10;
+        let searchTimeout;
+        let activeFilter = '';
 
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Écouteurs filtre statut (pills)
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    activeFilter = this.dataset.filter;
+                    currentPage = 1;
+                });
+            });
+
+            // Fermer le menu contextuel en cliquant ailleurs
+            document.addEventListener('click', closeContextMenu);
+            document.addEventListener('scroll', closeContextMenu, true);
+
+            // Ajouter les écouteurs context menu aux order-items existants
+            document.querySelectorAll('.order-item').forEach((row, index) => {
+                // Simuler un ID de commande pour la démo (dans un vrai app, ça viendrait des données)
+                const commandeId = index + 1;
+                const commandeStatut = index === 0 ? 'en_attente' : index === 1 ? 'en_preparation' : 'livree';
+                
+                // Context menu : clic droit desktop + maintien mobile
+                let pressTimer;
+                row.addEventListener('contextmenu', (e) => showContextMenu(e, commandeId, commandeStatut));
+                row.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => {
+                        const touch = e.touches[0];
+                        showContextMenu({ preventDefault: () => {}, clientX: touch.clientX, clientY: touch.clientY }, commandeId, commandeStatut);
+                    }, 600);
+                }, { passive: true });
+                row.addEventListener('touchend', () => clearTimeout(pressTimer));
+                row.addEventListener('touchmove', () => clearTimeout(pressTimer));
+            });
+        });
+
+        // ── Context menu ──────────────────────────────────────
+        let contextMenuTarget = null;
+
+        function showContextMenu(e, commandeId, commandeStatut) {
+            e.preventDefault();
+            closeContextMenu();
+
+            contextMenuTarget = { id: commandeId, statut: commandeStatut };
+
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.id = 'contextMenu';
+
+            menu.innerHTML = `
+                <button class="context-menu-item" onclick="handleContextAction('details', ${commandeId})">
+                    <i class="bi bi-eye"></i> Détails
+                </button>
+                <button class="context-menu-item" onclick="handleContextAction('traiter', ${commandeId})">
+                    <i class="bi bi-arrow-repeat"></i> Traiter
+                </button>
+                <button class="context-menu-item danger" onclick="handleContextAction('livree', ${commandeId})">
+                    <i class="bi bi-check-circle-fill"></i> Livrée
+                </button>
+            `;
+
+            // Positionner le menu
+            const x = e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth / 2;
+            const y = e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight / 2;
+
+            menu.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+            menu.style.top  = Math.min(y, window.innerHeight - 160) + 'px';
+
+            document.body.appendChild(menu);
+        }
+
+        function closeContextMenu() {
+            const existing = document.getElementById('contextMenu');
+            if (existing) existing.remove();
+            contextMenuTarget = null;
+        }
+
+     
+
+    </script>
+{% endblock %}
+    <!-- <footer>Du Bon Poulet Braisé — Commandez et gagnez des commissions avec votre code promo</footer> -->

@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from flask_cors import CORS
 from flask_login import current_user,LoginManager,login_user
 from backend.creat_data import create_commande, update_commande
-from backend.read_data import liste_commandes, read_commission, get_maquis_code,get_user_id,commande_livreur
+from backend.read_data import liste_commandes, read_commission, get_maquis_code,get_user_id,commande_livreur,get_livreur_num
 from backend.MessageApi import Message
 from backend.Models import User
 from backend.read_data import get_maquis_by_code
@@ -30,7 +30,7 @@ def load_user(id_user):
 
 @app.before_request
 def restriction():
-    tab_route = ["home","formcommande","login","login_maquis","livreur","api_commandes","static"] 
+    tab_route = ["home","formcommande","login","login_maquis","login_livreur","api_commandes","static"] 
     if not (current_user.is_authenticated or session.get('connecter')) and request.endpoint not in tab_route:
         return redirect(url_for("login"))
 
@@ -88,7 +88,6 @@ def Page_livreur():
             "data":table,
             "count":len(table)
         })
- 
  
 @app.route("/api/actionCommande", methods=["POST"])
 def api_commandes():
@@ -221,6 +220,22 @@ def login_maquis():
             flash("Code maquis incorrect, Veuillez réessayer.", "danger")
     return render_template('login_maquis.html')
 
+@app.route("/login_livreur",methods=["POST", "GET"])
+def login_livreur():
+    if request.method == 'POST':
+        num_livreur = request.form['numero']
+        livreur = get_livreur_num(num_livreur)
+        if livreur:
+            session['connecter'] = True
+            session['livreur_id'] = livreur['id']
+            session['livreur_nom'] = livreur['nom']
+            session['livreur_numero'] = livreur['numero']
+            session['role'] = "livreur"
+            return redirect(url_for("livreur"))
+        else:
+            flash("Code maquis incorrect, Veuillez réessayer.", "danger")
+    return render_template("login_livreur.html") 
+
 # Page route
 @app.route("/form-commande")
 def formcommande():
@@ -241,7 +256,7 @@ def Page_Dashboard():
         
         print(section)
         
-        update_commande(id_commande, action, id_utilisateur)
+        update_commande(id_commande, section, action, id_utilisateur)
         
         return redirect(url_for("Page_Dashboard"))
     return render_template("all-commandes.html")

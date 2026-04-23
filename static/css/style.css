@@ -666,6 +666,7 @@ i.bi {
     .main{
         padding-left: 0px !important;
         padding-right: 0px !important;
+        padding-bottom: 80px !important;
     }
     .dot{
         font-size: 10px !important;

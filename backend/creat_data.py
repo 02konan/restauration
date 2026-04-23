@@ -22,16 +22,16 @@ def create_commande(nom, telephone,Numcode ,code, statut,commune,prix_unitaire,q
         print(f"An error occurred: {error_message}")
         return {"success": False, "error": error_message}
     
-def update_commande(id_commande, action, id_utilisateur):
+def update_commande(id_commande, section, action, id_utilisateur):
     try:
         with connexion() as conn:
             with conn.cursor() as cursor:
                 if action=="Annuler":
-                   sql_active = "UPDATE `commandes` SET `Active` = %s,`statut` = %s, `date_modification` = NOW() WHERE `id` = %s"
-                   updatecommande=cursor.execute(sql_active, (1, action,id_commande))
+                   sql_active = "UPDATE `commandes` SET `id_etablissement` = %s, `Active` = %s,`statut` = %s, `date_modification` = NOW() WHERE `id` = %s"
+                   updatecommande=cursor.execute(sql_active, (1, section, action, id_commande))
                 else:
-                    sql_statut = "UPDATE `commandes` SET `statut` = %s,`date_modification` = NOW() WHERE `id` = %s"
-                    updatecommande=cursor.execute(sql_statut, (action,id_commande))
+                    sql_statut = "UPDATE `commandes` SET `id_etablissement`= %s,`statut` = %s,`date_modification` = NOW() WHERE `id` = %s"
+                    updatecommande=cursor.execute(sql_statut, (section, action, id_commande))
                     
                     if(updatecommande and action=="livree" ):
                         sql_valider = "INSERT INTO valider(`id_commande`, `id_utilisateur`) VALUES(%s, %s)"
