@@ -85,52 +85,51 @@
     }
    </style>
 
-    <div id="map" ></div>
-    <button class="list-btn rounded" id="list-btn"><i class="bi bi-list"></i></button>
+   <div id="map"></div>
+<button class="list-btn rounded" id="list-btn"><i class="bi bi-list"></i></button>
 
-    <div class="cart-start shadow rounded">
-        <div class="w-100 d-flex justify-content-between border-bottom">
-            <div>
-                <h6>CMD-123456546-123454</h6>
-                <p class="small text-muted">07 89 14 79 58</p>
-            </div>
-            <span class="fw-semibold">10 000 FCFA</span>
+<div class="cart-start shadow rounded" id="cart-start">
+    <div class="w-100 d-flex justify-content-between border-bottom">
+        <div>
+            <h6>CMD-123456546-123454</h6>
+            <p class="small text-muted">07 89 14 79 58</p>
         </div>
-        <div class="d-flex justify-content-between w-100 mb-3">
-            <div class="col-10">
-                <div class="">
+        <span class="fw-semibold">10 000 FCFA</span>
+    </div>
+    <div class="d-flex justify-content-between w-100 mb-3">
+        <div class="col-10">
+            <div class="">
                 <span class="small text-muted">Lieu</span>
                 <h6 class="m-0">ABOBO SAINT VIATOR</h6>
             </div>
-            </div>
-            <div class="mt-auto ">
-                <p class="quantity m-0 ms-auto mb-0">2</p>
-            </div>
         </div>
-        <a href="#" class="btn btn-custom-primary rounded-pill" id="gpsLink" target="_blank">
-            Démarrer la livraison
-        </a>
+        <div class="mt-auto">
+            <p class="quantity m-0 ms-auto mb-0">2</p>
+        </div>
+    </div>
+    <a href="#" class="btn btn-custom-primary rounded-pill" id="gpsLink" target="_blank">
+        Démarrer la livraison
+    </a>
+</div>
+
+<div class="cart-livreur shadow" id="cart-livreur">
+    <div class="container-fluid d-flex align-items-center mb-5">
+        <div class="">
+            <h5 class="m-0 p-0">Marius</h5>
+            <span class="small text-muted">livreur</span>
+        </div>
+        <a href="/logout" class="ms-auto">Se deconnecter<i class="bi bi-box-arrow-right ms-2"></i></a>
+    </div>
+    <div class="container-fluid p-0 banner">
+        <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
+        <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
     </div>
 
-    <div class="cart-livreur shadow " id="cart-livreur">
-        <div class="container-fluid d-flex align-items-center mb-5">
-            <div class="">
-                <h5 class="m-0 p-0">Marius</h5>
-                <span class="small text-muted">livreur</span>
-            </div>
-            <a href="/logout" class="ms-auto">Se deconnecter<i class="bi bi-box-arrow-right ms-2"></i></a>
-        </div>
-        <div class="container-fluid p-0 banner">
-            <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
-            
-            <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center my-3 subtitle">
-            <h4 class="fw-bold">Livraison</h4>
-            <span class="text-muted" id="totalResults">
-            </span>
-        </div>
+    <div class="d-flex justify-content-between align-items-center my-3 subtitle">
+        <h4 class="fw-bold">Livraison</h4>
+        <span class="text-muted" id="totalResults"></span>
+    </div>
+    <div>
 
         <div class="w-100 d-flex gap-2 mb-3">
             <form action="" class="d-flex col align-items-center px-3 py-3 rounded-pill animation-slide" id="searchForm">
@@ -138,72 +137,35 @@
                 <input type="text" class="" placeholder="Recherche..." id="searchInput" name="searchInput">
             </form>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <div class="order-item shadow-sm" data-bs-toggle="modal" data-bs-target="#detailsModal">
-                <div class="content w-100 d-flex gap-3">
-                    <div class="image">
-                        <img src="static/back/back0.png" alt="Poulet braisé">
-                    </div>
-                    <div class="text d-flex flex-column flex-grow-1">
-                        <div class="d-flex align-items-center gap-2">
-                            <h3 class="mb-0">Poulet braisé</h3>
-                            <span class="dot dot-pending" title="En attente">
-                                <i class="bi bi-clock-history"></i>
-                            </span>
-                        </div>
-                        <div class="text-muted desc mt-2">
-                            <span class="badge rounded-pill">CMD-24E463-5345435</span>
-                        </div>
-                        <div class="price-tag mt-auto">FCFA 10,000</div>
-                    </div>
-                    <div class="d-flex flex-column justify-content-between ms-auto mt-2 infos">
-                        <p class="small text-muted date mb-1">25 Mar 2026</p>
-                        <p class="quantity ms-auto mb-0">2</p>
-                    </div>
-                </div>
-                <div class="mt-2 pt-2 border-top d-flex align-items-center">
-                    <small class="text-warning">
-                            Nouvelle commande
-                    </small>
-                    <button class="accept-btn btn btn-sm btn-success rounded-pill ms-auto">Accepter</button>
-                </div>
-            </div>
+
+        <div class="d-flex flex-column gap-2" id="command-livreur">
+            <!-- Les commandes seront générées dynamiquement par livreur.js -->
         </div>
     </div>
+</div>
 
-
-    <div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
-        
-        <div class="container-fluid d-flex">
-            <a href="#" class="ms-auto">Se connecter</a>
-        </div>
-
-        <div class="container-fluid p-0 banner">
-            <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
-            <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center my-3 subtitle">
-            <h4 class="fw-bold">Livraisons</h4>
-            <span class="text-muted" id="livreuresults">
-            </span>
-        </div>
-
-        <form action="" class="d-flex align-items-center px-3 py-2 rounded-pill animation-slide" id="searchForm">
-            <i class="bi bi-search me-2"></i>
-            <input type="text" class="" placeholder="Recherche..." id="searchInput" name="searchInput">
-        </form>
-
-        <div class="d-flex gap-2 mt-2 filter-pills animation-slide" id="filterPills">
-            <button type="button" class="btn btn-sm rounded-pill filter-pill active" data-filter="">Tous</button>
-            <button type="button" class="btn btn-sm rounded-pill filter-pill" data-filter="en_preparation">Mes Livraisons</button>
-        </div>
-
-        <div class="container-fluid p-0 d-flex flex-column gap-2 list-commande animation-slide" id="result-commande-livreur">
-            
-        </div>
-        <audio id="notificationSound" src="{{ url_for('static', filename='js/bip.wav') }}" preload="auto"></audio>
+<div class="container-fluid p-0 d-flex flex-column gap-3 main" style="padding-bottom: 80px !important;">
+    <div class="container-fluid d-flex">
+        <a href="#" class="ms-auto">Se connecter</a>
     </div>
+
+    <div class="container-fluid p-0 banner">
+        <h1>DU BON POULET BRAISÉ POUR VOUS</h1>
+        <img src="{{ url_for('static', filename='back/back0.png') }}" alt="Poulet braisé">
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center my-3 subtitle">
+        <h4 class="fw-bold">Livraisons</h4>
+        <span class="text-muted"></span>
+    </div>
+
+    <div class="d-flex gap-2 mt-2 filter-pills animation-slide" id="filterPills">
+        <button type="button" class="btn btn-sm rounded-pill filter-pill active" data-filter="">Tous</button>
+        <button type="button" class="btn btn-sm rounded-pill filter-pill" data-filter="en_preparation">Mes Livraisons</button>
+    </div>
+
+    <audio id="notificationSound" src="{{ url_for('static', filename='js/bip.wav') }}" preload="auto"></audio>
+</div>
     
 {% endblock %}
 

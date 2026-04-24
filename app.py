@@ -88,6 +88,28 @@ def Page_livreur():
             "data":table,
             "count":len(table)
         })
+
+@app.route("/update_position", methods=["POST"])
+def update_position():
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Requête invalide"}), 400
+    
+    livreur_id = session['livreur_id']
+    lat = data.get('lat')
+    lng = data.get('lng')
+
+    print(f"Position du livreur {livreur_id} mise à jour : Latitude={lat}, Longitude={lng}")
+    
+   
+    
+    return jsonify({
+        "succes": True,
+        "message": "Position mise à jour",
+        "livreur_id": livreur_id,
+        "lat": lat,
+        "lng": lng
+    })
  
 @app.route("/api/actionCommande", methods=["POST"])
 def api_commandes():

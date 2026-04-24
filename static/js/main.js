@@ -51,6 +51,11 @@
         
         // Mettre à jour l'affichage
         function updateOrderSummary() {
+            // Vérifier que les éléments existent avant de les modifier
+            if (!displayQuantity || !subtotalElement || !totalElement) {
+                return;
+            }
+            
             const subtotal = UNIT_PRICE * currentQuantity;
             const total = subtotal + DELIVERY_FEE;
             
@@ -58,10 +63,10 @@
             subtotalElement.textContent = formatPrice(subtotal);
             totalElement.textContent = formatPrice(total);
             
-            hiddenQuantity.value = currentQuantity;
-            hiddenUnitPrice.value = UNIT_PRICE;
-            hiddenSubtotal.value = subtotal;
-            hiddenTotal.value = total;
+            if (hiddenQuantity) hiddenQuantity.value = currentQuantity;
+            if (hiddenUnitPrice) hiddenUnitPrice.value = UNIT_PRICE;
+            if (hiddenSubtotal) hiddenSubtotal.value = subtotal;
+            if (hiddenTotal) hiddenTotal.value = total;
         }
         
         // Événements des boutons
